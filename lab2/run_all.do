@@ -6,14 +6,17 @@ vdel -all -lib work
 vlib work
 
 # Compile all design files in order
-echo "Compiling partB_alu8imux..."
-vcom -work work -2002 -explicit partB_alu8imux.vhd
+echo "Compiling partA..."
+vcom -work work -2002 -explicit partA.vhd
 
-echo "Compiling partC_alu8imux..."
-vcom -work work -2002 -explicit partC_alu8imux.vhd
+echo "Compiling partB..."
+vcom -work work -2002 -explicit partB.vhd
 
-echo "Compiling partD_alu8imux..."
-vcom -work work -2002 -explicit partD_alu8imux.vhd
+echo "Compiling partC..."
+vcom -work work -2002 -explicit partC.vhd
+
+echo "Compiling partD..."
+vcom -work work -2002 -explicit partD.vhd
 
 echo "Compiling ALU..."
 vcom -work work -2002 -explicit ALU.vhd

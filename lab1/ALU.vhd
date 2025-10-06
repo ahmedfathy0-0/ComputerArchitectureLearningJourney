@@ -2,7 +2,7 @@ LIBRARY IEEE;
 USE IEEE.STD_LOGIC_1164.ALL;
 
 ENTITY ALU IS
-    PORT(
+    PORT (
         A, B : IN STD_LOGIC_VECTOR(7 DOWNTO 0);
         Cin : IN STD_LOGIC;
         S : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
@@ -19,7 +19,7 @@ ARCHITECTURE structural OF ALU IS
 BEGIN
     sel <= S(3 DOWNTO 2);
 
-    U_PARTB : ENTITY work.partB_alu8imux
+    U_PARTB : ENTITY work.partB_alsu
         PORT MAP(
             A => A,
             B => B,
@@ -28,7 +28,7 @@ BEGIN
             F => F_B
         );
 
-    U_PARTC : ENTITY work.partC_alu8imux
+    U_PARTC : ENTITY work.partC_alsu
         PORT MAP(
             A => A,
             Cin => Cin,
@@ -38,7 +38,7 @@ BEGIN
             Cout => Cout_C
         );
 
-    U_PARTD : ENTITY work.partD_alu8imux
+    U_PARTD : ENTITY work.partD_alsu
         PORT MAP(
             A => A,
             Cin => Cin,
@@ -49,13 +49,17 @@ BEGIN
         );
 
     -- Select between parts based on S3 & S2
-    PROCESS(F_B, F_C, F_D, Cout_C, Cout_D, sel)
+    PROCESS (F_B, F_C, F_D, Cout_C, Cout_D, sel)
     BEGIN
         CASE sel IS
-            WHEN "01" => F <= F_B; Cout <= '0';
-            WHEN "10" => F <= F_C; Cout <= Cout_C;
-            WHEN "11" => F <= F_D; Cout <= Cout_D;
-            WHEN OTHERS => F <= (OTHERS => '0'); Cout <= '0';
+            WHEN "01" => F <= F_B;
+                Cout <= '0';
+            WHEN "10" => F <= F_C;
+                Cout <= Cout_C;
+            WHEN "11" => F <= F_D;
+                Cout <= Cout_D;
+            WHEN OTHERS => F <= (OTHERS => '0');
+                Cout <= '0';
         END CASE;
     END PROCESS;
 
