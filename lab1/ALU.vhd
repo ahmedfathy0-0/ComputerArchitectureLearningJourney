@@ -19,7 +19,7 @@ ARCHITECTURE structural OF ALU IS
 BEGIN
     sel <= S(3 DOWNTO 2);
 
-    U_PARTB : ENTITY work.partB_alsu
+    U_PARTB : ENTITY work.partB_alu8imux
         PORT MAP(
             A => A,
             B => B,
@@ -28,7 +28,7 @@ BEGIN
             F => F_B
         );
 
-    U_PARTC : ENTITY work.partC_alsu
+    U_PARTC : ENTITY work.partC_alu8imux
         PORT MAP(
             A => A,
             Cin => Cin,
@@ -38,7 +38,7 @@ BEGIN
             Cout => Cout_C
         );
 
-    U_PARTD : ENTITY work.partD_alsu
+    U_PARTD : ENTITY work.partD_alu8imux
         PORT MAP(
             A => A,
             Cin => Cin,
@@ -48,7 +48,6 @@ BEGIN
             Cout => Cout_D
         );
 
-    -- Select between parts based on S3 & S2
     PROCESS (F_B, F_C, F_D, Cout_C, Cout_D, sel)
     BEGIN
         CASE sel IS

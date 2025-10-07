@@ -13,7 +13,6 @@ ARCHITECTURE behavior OF tb_ALU IS
     SIGNAL F : STD_LOGIC_VECTOR(7 DOWNTO 0);
     SIGNAL Cout : STD_LOGIC;
 
-    -- Procedure to print test results
     PROCEDURE print_result(
         operation : STRING;
         a_val, b_val, f_val : STD_LOGIC_VECTOR(7 DOWNTO 0);
@@ -42,7 +41,6 @@ ARCHITECTURE behavior OF tb_ALU IS
     END PROCEDURE;
 
 BEGIN
-    -- Instantiate the ALU
     UUT: ENTITY work.ALU
         PORT MAP(
             A => A,
@@ -53,12 +51,10 @@ BEGIN
             Cout => Cout
         );
 
-    -- Stimulus process
     stim_proc: PROCESS
     BEGIN
         REPORT "========== Starting ALU Testbench ==========" SEVERITY NOTE;
         
-        -- Part B: Logic Operations (A=F5, B=AA)
         REPORT "--- Part B: Logic Operations ---" SEVERITY NOTE;
         A <= X"F5"; B <= X"AA"; Cin <= '0';
         
@@ -78,7 +74,6 @@ BEGIN
         print_result("NOT A    ", A, B, F, Cin, Cout, S);
         ASSERT F = X"0A" REPORT "NOT A operation failed!" SEVERITY ERROR;
 
-        -- Part C: Right shifts/rotates (A=F5)
         REPORT "--- Part C: Right Shift/Rotate Operations ---" SEVERITY NOTE;
         A <= X"F5"; B <= X"00"; Cin <= '0';
         
@@ -132,7 +127,6 @@ BEGIN
         ASSERT F = X"EA" REPORT "Rotate left with carry (Cin=0) failed!" SEVERITY ERROR;
         ASSERT Cout = '1' REPORT "RLC(Cin=0) Cout failed!" SEVERITY ERROR;
         
-        -- Rotate left with carry, Cin=1
         Cin <= '1';
         S <= "1110"; WAIT FOR 10 ns;
         print_result("RLC(Cin=1)", A, B, F, Cin, Cout, S);
@@ -144,7 +138,6 @@ BEGIN
         ASSERT F = X"00" REPORT "Zero output failed!" SEVERITY ERROR;
         ASSERT Cout = '0' REPORT "Zero Cout failed!" SEVERITY ERROR;
 
-        -- Additional test: Rotate right A=7A
         REPORT "--- Additional Test ---" SEVERITY NOTE;
         A <= X"7A"; B <= X"00"; Cin <= '0';
         S <= "1001"; WAIT FOR 10 ns;  -- Rotate right

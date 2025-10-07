@@ -1,3 +1,8 @@
+quit -sim
+vdel -all -lib work
+
+vlib work
+
 vcom -2008 full_adder.vhd
 vcom -2008 partA.vhd
 vcom -2008 partB.vhd

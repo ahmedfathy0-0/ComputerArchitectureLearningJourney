@@ -6,14 +6,6 @@ Questa Intel Starter FPGA Edition-64 vcom 2025.1 Compiler 2025.01 Jan 18 2025
 -- Compiling entity partB_alu8imux
 -- Compiling architecture behavior of partB_alu8imux
 
-} {} {}} /home/ahmedfathy0-0/Documents/CMP27/ComputerArchitectureLearningJourney/lab1/partC_alu8imux.vhd {1 {vcom -work work -2002 -explicit -vopt -stats=none /home/ahmedfathy0-0/Documents/CMP27/ComputerArchitectureLearningJourney/lab1/partC_alu8imux.vhd
-Questa Intel Starter FPGA Edition-64 vcom 2025.1 Compiler 2025.01 Jan 18 2025
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Compiling entity partC_alu8imux
--- Compiling architecture behavior of partC_alu8imux
-
 } {} {}} /home/ahmedfathy0-0/Documents/CMP27/ComputerArchitectureLearningJourney/lab1/ALU.vhd {1 {vcom -work work -2002 -explicit -vopt -stats=none /home/ahmedfathy0-0/Documents/CMP27/ComputerArchitectureLearningJourney/lab1/ALU.vhd
 Questa Intel Starter FPGA Edition-64 vcom 2025.1 Compiler 2025.01 Jan 18 2025
 -- Loading package STANDARD
@@ -24,6 +16,24 @@ Questa Intel Starter FPGA Edition-64 vcom 2025.1 Compiler 2025.01 Jan 18 2025
 -- Loading entity partB_alu8imux
 -- Loading entity partC_alu8imux
 -- Loading entity partD_alu8imux
+
+} {} {}} /home/ahmedfathy0-0/Documents/CMP27/ComputerArchitectureLearningJourney/lab1/partC_alu8imux.vhd {1 {vcom -work work -2002 -explicit -vopt -stats=none /home/ahmedfathy0-0/Documents/CMP27/ComputerArchitectureLearningJourney/lab1/partC_alu8imux.vhd
+Questa Intel Starter FPGA Edition-64 vcom 2025.1 Compiler 2025.01 Jan 18 2025
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity partC_alu8imux
+-- Compiling architecture behavior of partC_alu8imux
+
+} {} {}} /home/ahmedfathy0-0/Documents/CMP27/ComputerArchitectureLearningJourney/lab1/tb_ALU.vhd {1 {vcom -work work -2002 -explicit -vopt -stats=none /home/ahmedfathy0-0/Documents/CMP27/ComputerArchitectureLearningJourney/lab1/tb_ALU.vhd
+Questa Intel Starter FPGA Edition-64 vcom 2025.1 Compiler 2025.01 Jan 18 2025
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package std_logic_textio
+-- Compiling entity tb_ALU
+-- Compiling architecture behavior of tb_ALU
+-- Loading entity ALU
 
 } {} {}} /home/ahmedfathy0-0/Documents/CMP27/ComputerArchitectureLearningJourney/lab1/partD_alu8imux.vhd {1 {vcom -work work -2002 -explicit -vopt -stats=none /home/ahmedfathy0-0/Documents/CMP27/ComputerArchitectureLearningJourney/lab1/partD_alu8imux.vhd
 Questa Intel Starter FPGA Edition-64 vcom 2025.1 Compiler 2025.01 Jan 18 2025

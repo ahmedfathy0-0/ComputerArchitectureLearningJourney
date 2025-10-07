@@ -10,27 +10,24 @@ ENTITY partB_alu8imux IS
 END ENTITY partB_alu8imux;
 
 ARCHITECTURE behavior OF partB_alu8imux IS
-    -- Internal copies of inputs
     SIGNAL A_int, B_int : STD_LOGIC_VECTOR(7 DOWNTO 0);
     SIGNAL F_int : STD_LOGIC_VECTOR(7 DOWNTO 0);
     SIGNAL sel : STD_LOGIC_VECTOR(1 DOWNTO 0);
 BEGIN
-    -- Copy input ports to internal signals
     A_int <= A;
     B_int <= B;
-    sel <= S1 & S0;  -- Concatenate into a signal of defined type
+    sel <= S1 & S0;
     
     PROCESS(A_int, B_int, sel)
     BEGIN
         CASE sel IS
-            WHEN "00" => F_int <= A_int AND B_int;    -- AND
-            WHEN "01" => F_int <= A_int OR B_int;     -- OR
-            WHEN "10" => F_int <= NOT (A_int OR B_int); -- NOR
-            WHEN "11" => F_int <= NOT A_int;          -- NOT A
+            WHEN "00" => F_int <= A_int AND B_int;   
+            WHEN "01" => F_int <= A_int OR B_int;    
+            WHEN "10" => F_int <= NOT (A_int OR B_int); 
+            WHEN "11" => F_int <= NOT A_int;          
             WHEN OTHERS => F_int <= (OTHERS => '0');
         END CASE;
     END PROCESS;
     
-    -- Drive output port
     F <= F_int;
 END ARCHITECTURE behavior;
