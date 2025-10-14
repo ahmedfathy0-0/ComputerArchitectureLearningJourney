@@ -2,7 +2,7 @@ LIBRARY IEEE;
 USE IEEE.STD_LOGIC_1164.ALL;
 USE IEEE.numeric_std.ALL;
 
-ENTITY register_file IS
+ENTITY register_file_mem IS
     PORT (
         clk : IN STD_LOGIC;
         rst : IN STD_LOGIC;
@@ -14,9 +14,9 @@ ENTITY register_file IS
         data_out_a : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
         data_out_b : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)
     );
-END ENTITY register_file;
+END ENTITY register_file_mem;
 
-ARCHITECTURE sync_ram_with_write_priority OF register_file IS
+ARCHITECTURE sync_ram_with_write_priority OF register_file_mem IS
     TYPE ram_type IS ARRAY(0 TO 7) OF STD_LOGIC_VECTOR(7 DOWNTO 0);
     SIGNAL ram_array : ram_type := (OTHERS => (OTHERS => '0'));
 
@@ -32,10 +32,8 @@ BEGIN
         END IF;
     END PROCESS;
 
-    data_out_a <= data_in WHEN write_enable = '1' AND address_read_a = address_write ELSE
-                  ram_array(to_integer(unsigned(address_read_a)));
+    data_out_a <= ram_array(to_integer(unsigned(address_read_a)));
 
-    data_out_b <= data_in WHEN write_enable = '1' AND address_read_b = address_write ELSE
-                  ram_array(to_integer(unsigned(address_read_b)));
+    data_out_b <= ram_array(to_integer(unsigned(address_read_b)));
 
 END ARCHITECTURE sync_ram_with_write_priority;
