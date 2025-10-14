@@ -3,7 +3,7 @@ catch {vdel -all -lib work}
 
 vlib work
 
-vcom -2008 src/register_file_mem.vhd
+vcom -2008 register_file_mem.vhd
 
 vsim -gui work.register_file_mem
 

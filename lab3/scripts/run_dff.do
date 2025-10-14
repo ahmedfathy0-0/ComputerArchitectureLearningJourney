@@ -3,9 +3,9 @@ catch {vdel -all -lib work}
 
 vlib work
 
-vcom -2008 src/dff_dff.vhd
-vcom -2008 src/register_8bit_dff.vhd
-vcom -2008 src/register_file_dff.vhd
+vcom -2008 dff_dff.vhd
+vcom -2008 register_8bit_dff.vhd
+vcom -2008 register_file_dff.vhd
 
 vsim -gui work.register_file_dff
 
