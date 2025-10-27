@@ -2,13 +2,17 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE work.elevator_types.ALL;
 
-ENTITY tb_elevator_controller_simple IS
-END ENTITY tb_elevator_controller_simple;
+ENTITY tb_elevator_controller IS
+END ENTITY tb_elevator_controller;
 
-ARCHITECTURE behavior OF tb_elevator_controller_simple IS
+ARCHITECTURE behavior OF tb_elevator_controller IS
 
   COMPONENT Elevator_controller
-    GENERIC (MAX_FLOOR : INTEGER := 9);
+    GENERIC (
+      MAX_FLOOR : INTEGER := 9;
+      CLOCK_FREQ : INTEGER := 50_000_000;
+      DURATION_SEC : INTEGER := 2
+    );
     PORT (
       clk : IN STD_LOGIC;
       reset : IN STD_LOGIC;
@@ -34,16 +38,20 @@ ARCHITECTURE behavior OF tb_elevator_controller_simple IS
 BEGIN
 
   uut : Elevator_controller
-    GENERIC MAP (MAX_FLOOR => 9)
-    PORT MAP (
-      clk => clk,
-      reset => reset,
-      enable => enable,
-      next_floor => next_floor,
-      current_floor => current_floor,
-      door_state => door_state,
-      clear_request => clear_request
-    );
+  GENERIC MAP(
+    MAX_FLOOR => 9,
+    CLOCK_FREQ => 100, -- Fast clock for simulation (100 Hz)
+    DURATION_SEC => 2
+  )
+  PORT MAP(
+    clk => clk,
+    reset => reset,
+    enable => enable,
+    next_floor => next_floor,
+    current_floor => current_floor,
+    door_state => door_state,
+    clear_request => clear_request
+  );
 
   clk_process : PROCESS
   BEGIN
@@ -59,26 +67,31 @@ BEGIN
   stim_proc : PROCESS
   BEGIN
     REPORT "Testing Elevator Controller";
-    
+
     WAIT FOR 100 ns;
     REPORT "Initial: floor=" & INTEGER'IMAGE(current_floor) & ", door=" & door_state_type'IMAGE(door_state);
-    
+
     -- Request movement to floor 3
     REPORT "Setting next_floor=3, enable=1";
     next_floor <= 3;
     enable <= '1';
     WAIT FOR 200 ns;
-    
+
     REPORT "After enable: floor=" & INTEGER'IMAGE(current_floor);
-    
-    -- Wait a bit to see if it moves
-    WAIT FOR 1 us;
-    REPORT "After 1us: floor=" & INTEGER'IMAGE(current_floor);
-    
-    WAIT FOR 10 us;
-    REPORT "After 11us total: floor=" & INTEGER'IMAGE(current_floor) & ", door=" & door_state_type'IMAGE(door_state);
-    
-    REPORT "Test complete!";
+
+    -- Wait for elevator to move (3 floors × 4us + door 4us = 16us)
+    WAIT FOR 20 us;
+    REPORT "After 20us: floor=" & INTEGER'IMAGE(current_floor) & ", door=" & door_state_type'IMAGE(door_state);
+
+    -- Test assertions
+    ASSERT current_floor = 3
+    REPORT "ERROR: Expected floor 3, got " & INTEGER'IMAGE(current_floor)
+      SEVERITY ERROR;
+    ASSERT door_state = DOOR_CLOSED
+    REPORT "ERROR: Expected door closed, got " & door_state_type'IMAGE(door_state)
+      SEVERITY ERROR;
+
+    REPORT "Test complete - elevator reached floor 3!";
     test_running <= FALSE;
     WAIT;
   END PROCESS;

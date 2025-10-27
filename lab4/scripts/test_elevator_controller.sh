@@ -1,17 +1,14 @@
 #!/bin/bash
 
-# Script to compile and run elevator controller simulation with GHDL
-# View waveforms with GTKWave
+# Compile and simulate the complete elevator system using GHDL and GTKWave
 
-echo "===== Elevator Controller Simulation ====="
-echo ""
+echo "Compiling elevator system with GHDL..."
 
 # Clean previous compilation
-echo "Cleaning previous build..."
-rm -f *.o *.cf *.vcd elevator_ctrl_tb work-obj93.cf
+rm -f *.o *.cf tb_elevator_controller elevator_system.vcd
 
-# Create work directory if needed
-mkdir -p work
+# Change to src directory
+cd ../src || exit 1
 
 echo ""
 echo "===== Compiling VHDL files ====="
@@ -40,15 +37,15 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "4. Compiling testbench..."
-ghdl -a --std=08 --work=work elevator_ctrl_tb.vhd
+ghdl -a --std=08 --work=work ./testbenches/tb_elevator_controller.vhd
 if [ $? -ne 0 ]; then
-    echo "ERROR: Failed to compile elevator_ctrl_tb.vhd"
+    echo "ERROR: Failed to compile tb_elevator_controller.vhd"
     exit 1
 fi
 
 echo ""
 echo "===== Elaborating design ====="
-ghdl -e --std=08 --work=work elevator_ctrl_tb
+ghdl -e --std=08 --work=work tb_elevator_controller
 if [ $? -ne 0 ]; then
     echo "ERROR: Failed to elaborate testbench"
     exit 1
@@ -56,21 +53,9 @@ fi
 
 echo ""
 echo "===== Running simulation ====="
-echo "(Generating VCD waveform file: elevator_ctrl_tb.vcd)"
-ghdl -r --std=08 --work=work elevator_ctrl_tb --vcd=elevator_ctrl_tb.vcd --stop-time=10ms
+echo "(Generating VCD waveform file: tb_elevator_controller.vcd)"
+ghdl -r --std=08 --work=work tb_elevator_controller --vcd=./testbenches/tb_elevator_controller.vcd --stop-time=10ms
 if [ $? -ne 0 ]; then
     echo "ERROR: Simulation failed"
     exit 1
 fi
-
-echo ""
-echo "===== Simulation complete ====="
-echo ""
-echo "VCD file generated: elevator_ctrl_tb.vcd"
-echo ""
-echo "To view waveforms, run:"
-echo "  gtkwave elevator_ctrl_tb.vcd"
-echo ""
-
-echo ""
-echo "Done!"

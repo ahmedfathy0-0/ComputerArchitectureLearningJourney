@@ -1,1 +1,5 @@
 */work
+*.vcd
+*.o
+*.cf
+*.ghw

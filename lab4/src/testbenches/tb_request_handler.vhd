@@ -3,10 +3,10 @@ USE ieee.std_logic_1164.ALL;
 
 -- Simple testbench to debug request_handler
 
-ENTITY tb_request_handler_simple IS
-END ENTITY tb_request_handler_simple;
+ENTITY tb_request_handler IS
+END ENTITY tb_request_handler;
 
-ARCHITECTURE behavior OF tb_request_handler_simple IS
+ARCHITECTURE behavior OF tb_request_handler IS
 
   COMPONENT Request_handler
     GENERIC (N : INTEGER := 9);
