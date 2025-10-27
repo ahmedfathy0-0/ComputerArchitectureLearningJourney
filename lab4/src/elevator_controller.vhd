@@ -96,7 +96,6 @@ BEGIN
           -- Check if movement is needed (when enabled and different floor)
           IF enable = '1' AND current_floor_internal /= next_floor THEN
             state <= MOVING;
-            REPORT "Elevator_controller: transition IDLE -> MOVING; curr=" & INTEGER'IMAGE(current_floor_internal) & " next=" & INTEGER'IMAGE(next_floor) & " enable=" & STD_LOGIC'IMAGE(enable);
           END IF;
 
         WHEN MOVING =>
@@ -107,7 +106,6 @@ BEGIN
             -- Arrived at destination: open door immediately
             door_state_internal <= DOOR_OPEN;
             state <= DOOR_OPEN;
-            REPORT "Elevator_controller: Arrived at floor " & INTEGER'IMAGE(current_floor_internal) & "; opening door.";
             move_timer_reset <= '1';
             timer_enable <= '0';
           ELSE
@@ -116,10 +114,8 @@ BEGIN
               -- Move one floor
               IF current_floor_internal < next_floor THEN
                 current_floor_internal <= current_floor_internal + 1;
-                REPORT "Elevator_controller: Moving up to " & INTEGER'IMAGE(current_floor_internal + 1);
               ELSIF current_floor_internal > next_floor THEN
                 current_floor_internal <= current_floor_internal - 1;
-                REPORT "Elevator_controller: Moving down to " & INTEGER'IMAGE(current_floor_internal - 1);
               END IF;
 
               -- Reset timer for next movement
@@ -137,7 +133,6 @@ BEGIN
           IF timer_done = '1' THEN
             door_state_internal <= DOOR_CLOSED;
             clear_request <= '1'; -- Signal that floor has been served
-            REPORT "Elevator_controller: Door timer done, clearing request for floor " & INTEGER'IMAGE(current_floor_internal);
             state <= IDLE;
             move_timer_reset <= '1';
             timer_enable <= '0';

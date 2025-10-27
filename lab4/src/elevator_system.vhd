@@ -4,7 +4,7 @@ USE work.elevator_types.ALL;
 
 -- Top-level Elevator System
 -- Integrates Request Handler and Elevator Controller
--- 
+--
 -- Input Interface:
 --   floor_select: 4-bit binary input from switches (0000-1001 for floors 0-9)
 --   request_button: Push button to register floor request (asynchronous input)
@@ -79,7 +79,7 @@ ARCHITECTURE structural OF Elevator_system IS
 BEGIN
 
   -- Request Handler Instance
-  -- Manages floor requests and determines next target using SCAN algorithm
+  -- Manages floor requests and determines next target
   request_handler_inst : Request_handler
   GENERIC MAP(
     N => MAX_FLOOR
