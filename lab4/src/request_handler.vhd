@@ -3,13 +3,13 @@ USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 
 -- Request Handler for Elevator Controller
--- Manages floor requests and determines next target floor
+-- Manages floor requests and determines next target floor using SCAN algorithm
 -- Continues in current direction until no more requests
 -- When next_floor = current_floor, it means no pending requests (IDLE)
 -- 
 -- Input handling:
--- - floor_select: 4-bit binary input from switches (0000-1001 for floors 0-9)
--- - request_button: Push button to register the floor request (asynchronous)
+-- - floor_request: Single pulse indicating a valid floor request
+-- - floor_number: Integer representing the requested floor (0-9)
 -- - Reset only clears pending requests, doesn't affect current operation
 
 ENTITY Request_handler IS
@@ -17,8 +17,8 @@ ENTITY Request_handler IS
   PORT (
     clk : IN STD_LOGIC;
     reset : IN STD_LOGIC;
-    floor_select : IN STD_LOGIC_VECTOR(3 DOWNTO 0); -- Binary floor selection (0-9)
-    request_button : IN STD_LOGIC; -- Push button to register request
+    floor_request : IN STD_LOGIC; -- Single pulse for valid floor request
+    floor_number : IN INTEGER RANGE 0 TO N; -- Requested floor number
     current_floor : IN INTEGER RANGE 0 TO N; -- Current elevator position
     clear_request : IN STD_LOGIC; -- Pulse to clear current floor request
 
@@ -29,10 +29,6 @@ END ENTITY Request_handler;
 ARCHITECTURE behavior OF Request_handler IS
   -- Store pending requests for each floor
   SIGNAL pending_requests : STD_LOGIC_VECTOR(N DOWNTO 0) := (OTHERS => '0');
-
-  -- Button synchronization and edge detection
-  SIGNAL button_sync : STD_LOGIC_VECTOR(2 DOWNTO 0) := "000";
-  SIGNAL button_pressed : STD_LOGIC := '0'; -- Rising edge detected
 
   -- Direction state
   TYPE direction_type IS (UP, DOWN, IDLE);
@@ -69,21 +65,8 @@ ARCHITECTURE behavior OF Request_handler IS
 
 BEGIN
 
-  -- Button synchronizer and edge detector
-  button_sync_proc : PROCESS (clk)
-  BEGIN
-    IF rising_edge(clk) THEN
-      button_sync <= button_sync(1 DOWNTO 0) & request_button;
-    END IF;
-  END PROCESS;
-
-  -- Detect rising edge of synchronized button
-  button_pressed <= '1' WHEN button_sync(2 DOWNTO 1) = "01" ELSE
-    '0';
-
   -- Sequential Process: Store requests and maintain direction state
   request_storage : PROCESS (clk, reset)
-    VARIABLE requested_floor : INTEGER RANGE 0 TO N;
   BEGIN
     IF reset = '1' THEN
       -- Reset clears pending requests and returns direction to IDLE
@@ -91,13 +74,11 @@ BEGIN
       direction <= IDLE;
 
     ELSIF rising_edge(clk) THEN
-      -- Step 1: Register new floor request when button is pressed
-      IF button_pressed = '1' THEN
-        -- Convert 4-bit binary input to integer
-        requested_floor := to_integer(unsigned(floor_select));
-        -- Only register if valid floor number
-        IF requested_floor <= N THEN
-          pending_requests(requested_floor) <= '1';
+      -- Step 1: Register new floor request
+      IF floor_request = '1' THEN
+        -- Register the requested floor
+        IF floor_number <= N THEN
+          pending_requests(floor_number) <= '1';
         END IF;
       END IF;
 

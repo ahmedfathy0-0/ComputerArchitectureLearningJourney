@@ -48,8 +48,8 @@ ARCHITECTURE structural OF Elevator_system IS
     PORT (
       clk : IN STD_LOGIC;
       reset : IN STD_LOGIC;
-      floor_select : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
-      request_button : IN STD_LOGIC;
+      floor_request : IN STD_LOGIC;
+      floor_number : IN INTEGER RANGE 0 TO N;
       current_floor : IN INTEGER RANGE 0 TO N;
       clear_request : IN STD_LOGIC;
       next_floor : OUT INTEGER RANGE 0 TO N
@@ -87,7 +87,28 @@ ARCHITECTURE structural OF Elevator_system IS
   SIGNAL enable_internal : STD_LOGIC;
   SIGNAL floor_binary : STD_LOGIC_VECTOR(3 DOWNTO 0);
 
+  -- Button synchronization and edge detection
+  SIGNAL button_sync : STD_LOGIC_VECTOR(1 DOWNTO 0) := "00";
+  SIGNAL button_pressed : STD_LOGIC := '0';
+  SIGNAL floor_number_internal : INTEGER RANGE 0 TO MAX_FLOOR;
+
 BEGIN
+
+  -- Button synchronizer and edge detector
+  -- Synchronizes asynchronous button input to prevent metastability
+  button_sync_proc : PROCESS (clk)
+  BEGIN
+    IF rising_edge(clk) THEN
+      button_sync <= button_sync(0) & request_button;
+    END IF;
+  END PROCESS;
+
+  -- Detect rising edge of synchronized button
+  button_pressed <= '1' WHEN button_sync = "01" ELSE
+    '0';
+
+  -- Convert floor_select to integer
+  floor_number_internal <= to_integer(unsigned(floor_select));
 
   -- Request Handler Instance
   -- Manages floor requests and determines next target
@@ -98,8 +119,8 @@ BEGIN
   PORT MAP(
     clk => clk,
     reset => reset,
-    floor_select => floor_select,
-    request_button => request_button,
+    floor_request => button_pressed,
+    floor_number => floor_number_internal,
     current_floor => current_floor_internal,
     clear_request => clear_request_internal,
     next_floor => next_floor_internal
