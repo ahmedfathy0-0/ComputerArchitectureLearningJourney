@@ -31,7 +31,7 @@ n@_opt
 OL;O;2024.3;79
 R2
 Eelevator_fsm
-Z3 w1761660978
+Z3 w1761661891
 Z4 DPx4 ieee 11 numeric_std 0 22 :ASDNFgHXf_ih3J@9F3Ze1
 Z5 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
 Z6 DPx4 ieee 14 std_logic_1164 0 22 eNV`TJ_GofJTzYa?f<@Oe1
@@ -44,9 +44,9 @@ VTQcJPCSF4jb:U@SZhYjcg3
 !s100 ^[6jio:JSnXhZ<8kDFWbY2
 Z10 OV;C;10.5b;63
 31
-Z11 !s110 1761661000
+Z11 !s110 1761661932
 !i10b 1
-Z12 !s108 1761661000.000000
+Z12 !s108 1761661932.000000
 Z13 !s90 -reportprogress|300|-93|elevator_fsm.vhd|
 Z14 !s107 elevator_fsm.vhd|
 !i113 1
@@ -59,8 +59,8 @@ R6
 DEx4 work 12 elevator_fsm 0 22 TQcJPCSF4jb:U@SZhYjcg3
 l60
 L17
-Vo]AVNNFWN^F=3_kIkSc^B2
-Z16 !s100 7YHFaLXY?1gzN=6XcRkYZ2
+VDIil1;^5Z`OJ^MAeMl;nL2
+Z16 !s100 EkTjReD:RjC2^2UeO2oWO0
 R10
 31
 R11

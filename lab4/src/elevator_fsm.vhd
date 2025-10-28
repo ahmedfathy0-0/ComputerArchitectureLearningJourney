@@ -95,6 +95,107 @@ BEGIN
       END IF;
     END IF;
 
+    -- Clear the request for current floor when door opens and timer is done
+    IF current_state = DOOR_OPEN AND timer_done = '1' THEN
+      pending_requests(current_floor_internal) <= '0';
+    END IF;
+
+    -- Target floor selection logic using SCAN algorithm
+    -- Priority: Continue in current direction, then reverse if needed
+    IF pending_requests /= "0000000000" THEN
+      CASE direction IS
+        WHEN UP =>
+          -- Look for requests above current floor (continuing upward)
+          has_above := FALSE;
+          FOR i IN current_floor_internal + 1 TO 9 LOOP
+            IF pending_requests(i) = '1' THEN
+              target_floor <= i;
+              has_above := TRUE;
+              EXIT;
+            END IF;
+          END LOOP;
+
+          -- If no requests above, look below and change direction
+          IF NOT has_above THEN
+            has_below := FALSE;
+            FOR i IN current_floor_internal - 1 DOWNTO 0 LOOP
+              IF pending_requests(i) = '1' THEN
+                target_floor <= i;
+                direction <= DOWN;
+                has_below := TRUE;
+                EXIT;
+              END IF;
+            END LOOP;
+          END IF;
+
+        WHEN DOWN =>
+          -- Look for requests below current floor (continuing downward)
+          has_below := FALSE;
+          FOR i IN current_floor_internal - 1 DOWNTO 0 LOOP
+            IF pending_requests(i) = '1' THEN
+              target_floor <= i;
+              has_below := TRUE;
+              EXIT;
+            END IF;
+          END LOOP;
+
+          -- If no requests below, look above and change direction
+          IF NOT has_below THEN
+            has_above := FALSE;
+            FOR i IN current_floor_internal + 1 TO 9 LOOP
+              IF pending_requests(i) = '1' THEN
+                target_floor <= i;
+                direction <= UP;
+                has_above := TRUE;
+                EXIT;
+              END IF;
+            END LOOP;
+          END IF;
+
+        WHEN IDLE =>
+          -- No direction set, find any request and set initial direction
+          FOR i IN 0 TO 9 LOOP
+            IF pending_requests(i) = '1' THEN
+              target_floor <= i;
+              IF i > current_floor_internal THEN
+                direction <= UP;
+              ELSIF i < current_floor_internal THEN
+                direction <= DOWN;
+              END IF;
+              EXIT;
+            END IF;
+          END LOOP;
+      END CASE;
+    ELSE
+      -- No pending requests, set direction to IDLE
+      direction <= IDLE;
+    END IF;
+
+    -- Movement logic
+    CASE current_state IS
+      WHEN MV_UP =>
+        IF current_floor_internal < target_floor THEN
+          current_floor_internal <= current_floor_internal + 1;
+        END IF;
+        direction <= UP;
+      WHEN MV_DN =>
+        IF current_floor_internal > target_floor THEN
+          current_floor_internal <= current_floor_internal - 1;
+        END IF;
+        direction <= DOWN;
+      WHEN OTHERS =>
+        NULL;
+    END CASE;
+
+    -- Timer control based on state
+    IF current_state = DOOR_OPEN THEN
+      timer_reset <= '0';
+      timer_enable <= '1';
+    ELSE
+      timer_reset <= '1';
+      timer_enable <= '0';
+    END IF;
+
     IF reset = '1' THEN
       current_state <= IDLE;
       current_floor_internal <= 0;
@@ -105,112 +206,11 @@ BEGIN
       direction <= IDLE;
     ELSIF rising_edge(clk) THEN
       current_state <= next_state;
-
-      -- Clear the request for current floor when door opens and timer is done
-      IF current_state = DOOR_OPEN AND timer_done = '1' THEN
-        pending_requests(current_floor_internal) <= '0';
-      END IF;
-
-      -- Target floor selection logic using SCAN algorithm
-      -- Priority: Continue in current direction, then reverse if needed
-      IF pending_requests /= "0000000000" THEN
-        CASE direction IS
-          WHEN UP =>
-            -- Look for requests above current floor (continuing upward)
-            has_above := FALSE;
-            FOR i IN current_floor_internal + 1 TO 9 LOOP
-              IF pending_requests(i) = '1' THEN
-                target_floor <= i;
-                has_above := TRUE;
-                EXIT;
-              END IF;
-            END LOOP;
-
-            -- If no requests above, look below and change direction
-            IF NOT has_above THEN
-              has_below := FALSE;
-              FOR i IN current_floor_internal - 1 DOWNTO 0 LOOP
-                IF pending_requests(i) = '1' THEN
-                  target_floor <= i;
-                  direction <= DOWN;
-                  has_below := TRUE;
-                  EXIT;
-                END IF;
-              END LOOP;
-            END IF;
-
-          WHEN DOWN =>
-            -- Look for requests below current floor (continuing downward)
-            has_below := FALSE;
-            FOR i IN current_floor_internal - 1 DOWNTO 0 LOOP
-              IF pending_requests(i) = '1' THEN
-                target_floor <= i;
-                has_below := TRUE;
-                EXIT;
-              END IF;
-            END LOOP;
-
-            -- If no requests below, look above and change direction
-            IF NOT has_below THEN
-              has_above := FALSE;
-              FOR i IN current_floor_internal + 1 TO 9 LOOP
-                IF pending_requests(i) = '1' THEN
-                  target_floor <= i;
-                  direction <= UP;
-                  has_above := TRUE;
-                  EXIT;
-                END IF;
-              END LOOP;
-            END IF;
-
-          WHEN IDLE =>
-            -- No direction set, find any request and set initial direction
-            FOR i IN 0 TO 9 LOOP
-              IF pending_requests(i) = '1' THEN
-                target_floor <= i;
-                IF i > current_floor_internal THEN
-                  direction <= UP;
-                ELSIF i < current_floor_internal THEN
-                  direction <= DOWN;
-                END IF;
-                EXIT;
-              END IF;
-            END LOOP;
-        END CASE;
-      ELSE
-        -- No pending requests, set direction to IDLE
-        direction <= IDLE;
-      END IF;
-
-      -- Movement logic
-      CASE current_state IS
-        WHEN MV_UP =>
-          IF current_floor_internal < target_floor THEN
-            current_floor_internal <= current_floor_internal + 1;
-          END IF;
-          direction <= UP;
-        WHEN MV_DN =>
-          IF current_floor_internal > target_floor THEN
-            current_floor_internal <= current_floor_internal - 1;
-          END IF;
-          direction <= DOWN;
-        WHEN OTHERS =>
-          NULL;
-      END CASE;
-
-      -- Timer control based on state
-      IF current_state = DOOR_OPEN THEN
-        timer_reset <= '0';
-        timer_enable <= '1';
-      ELSE
-        timer_reset <= '1';
-        timer_enable <= '0';
-      END IF;
     END IF;
   END PROCESS;
 
   -- Next state logic process
-  PROCESS (current_state, current_floor_internal, target_floor, timer_done, pending_requests)
+  PROCESS (current_state, current_floor_internal, target_floor, timer_done, pending_requests, floor_request, request_valid)
   BEGIN
     CASE current_state IS
       WHEN IDLE =>
