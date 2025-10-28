@@ -2,45 +2,45 @@ vlib work
 
 vcom -93 src/timer.vhd
 vcom -93 src/ssd.vhd
-vcom -93 src/elevator_fsm.vhd
-vcom -93 test/tb_elevator_fsm.vhd
+vcom -93 src/elevator_ctrl.vhd
+vcom -93 test/elevator_ctrl_tb.vhd
 
-vsim work.tb_elevator_fsm_cfg
+vsim work.elevator_ctrl_tb_cfg
 
 add wave -divider "Clock and Reset"
-add wave -format logic sim:/tb_elevator_fsm/clk
-add wave -format logic sim:/tb_elevator_fsm/reset
+add wave -format logic sim:/elevator_ctrl_tb/clk
+add wave -format logic sim:/elevator_ctrl_tb/reset
 
 add wave -divider "Generics/Constants"
-add wave -format literal -radix unsigned sim:/tb_elevator_fsm/uut/N_FLOORS
+add wave -format literal -radix unsigned sim:/elevator_ctrl_tb/uut/N_FLOORS
 
 add wave -divider "Inputs"
-add wave -format literal -radix binary sim:/tb_elevator_fsm/floor_request
-add wave -format logic sim:/tb_elevator_fsm/request_valid
+add wave -format literal -radix binary sim:/elevator_ctrl_tb/floor_request
+add wave -format logic sim:/elevator_ctrl_tb/request_valid
 
 add wave -divider "FSM State"
-add wave -format literal sim:/tb_elevator_fsm/uut/current_state
-add wave -format literal sim:/tb_elevator_fsm/uut/next_state
-add wave -format literal sim:/tb_elevator_fsm/uut/direction
+add wave -format literal sim:/elevator_ctrl_tb/uut/current_state
+add wave -format literal sim:/elevator_ctrl_tb/uut/next_state
+add wave -format literal sim:/elevator_ctrl_tb/uut/direction
 
 add wave -divider "Floor Information"
-add wave -format literal -radix unsigned sim:/tb_elevator_fsm/current_floor
-add wave -format literal -radix unsigned sim:/tb_elevator_fsm/uut/target_floor
-add wave -format literal -radix binary sim:/tb_elevator_fsm/uut/pending_requests
+add wave -format literal -radix unsigned sim:/elevator_ctrl_tb/current_floor
+add wave -format literal -radix unsigned sim:/elevator_ctrl_tb/uut/target_floor
+add wave -format literal -radix binary sim:/elevator_ctrl_tb/uut/pending_requests
 
 add wave -divider "Outputs"
-add wave -format literal -radix binary sim:/tb_elevator_fsm/door_status
-add wave -format literal -radix binary sim:/tb_elevator_fsm/seven_segment
+add wave -format literal -radix binary sim:/elevator_ctrl_tb/door_status
+add wave -format literal -radix binary sim:/elevator_ctrl_tb/seven_segment
 
 add wave -divider "Door Timer Signals"
-add wave -format logic sim:/tb_elevator_fsm/uut/door_timer_reset
-add wave -format logic sim:/tb_elevator_fsm/uut/door_timer_enable
-add wave -format logic sim:/tb_elevator_fsm/uut/door_timer_done
+add wave -format logic sim:/elevator_ctrl_tb/uut/door_timer_reset
+add wave -format logic sim:/elevator_ctrl_tb/uut/door_timer_enable
+add wave -format logic sim:/elevator_ctrl_tb/uut/door_timer_done
 
 add wave -divider "Movement Timer Signals"
-add wave -format logic sim:/tb_elevator_fsm/uut/move_timer_reset
-add wave -format logic sim:/tb_elevator_fsm/uut/move_timer_enable
-add wave -format logic sim:/tb_elevator_fsm/uut/move_timer_done
+add wave -format logic sim:/elevator_ctrl_tb/uut/move_timer_reset
+add wave -format logic sim:/elevator_ctrl_tb/uut/move_timer_enable
+add wave -format logic sim:/elevator_ctrl_tb/uut/move_timer_done
 
 configure wave -namecolwidth 250
 configure wave -valuecolwidth 100

@@ -2,12 +2,12 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 
-ENTITY tb_elevator_fsm IS
-END ENTITY tb_elevator_fsm;
+ENTITY elevator_ctrl_tb IS
+END ENTITY elevator_ctrl_tb;
 
-ARCHITECTURE testbench OF tb_elevator_fsm IS
+ARCHITECTURE testbench OF elevator_ctrl_tb IS
   -- Component declaration
-  COMPONENT elevator_fsm IS
+  COMPONENT elevator_ctrl IS
     GENERIC (
       N_FLOORS : INTEGER := 10
     );
@@ -84,7 +84,7 @@ ARCHITECTURE testbench OF tb_elevator_fsm IS
 
 BEGIN
   -- Instantiate the Unit Under Test (UUT)
-  uut : elevator_fsm
+  uut : elevator_ctrl
   GENERIC MAP(
     N_FLOORS => 10
   )
@@ -569,9 +569,9 @@ BEGIN
 END ARCHITECTURE testbench;
 
 -- Configuration to override timer generics for fast simulation
-CONFIGURATION tb_elevator_fsm_cfg OF tb_elevator_fsm IS
+CONFIGURATION elevator_ctrl_tb_cfg OF elevator_ctrl_tb IS
   FOR testbench
-    FOR uut : elevator_fsm
+    FOR uut : elevator_ctrl
       FOR behavioral
         FOR door_timer_inst : timer
           USE ENTITY work.timer(rtl)
@@ -590,4 +590,4 @@ CONFIGURATION tb_elevator_fsm_cfg OF tb_elevator_fsm IS
       END FOR;
     END FOR;
   END FOR;
-END CONFIGURATION tb_elevator_fsm_cfg;
+END CONFIGURATION elevator_ctrl_tb_cfg;

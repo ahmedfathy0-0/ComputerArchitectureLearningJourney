@@ -2,7 +2,7 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 
-ENTITY elevator_fsm IS
+ENTITY elevator_ctrl IS
   GENERIC (
     N_FLOORS : INTEGER := 10 -- Number of floors (default 10: floors 0-9)
   );
@@ -15,9 +15,9 @@ ENTITY elevator_fsm IS
     current_floor : OUT INTEGER RANGE 0 TO 9;
     door_status : OUT STD_LOGIC_VECTOR(9 DOWNTO 0)
   );
-END ENTITY elevator_fsm;
+END ENTITY elevator_ctrl;
 
-ARCHITECTURE behavioral OF elevator_fsm IS
+ARCHITECTURE behavioral OF elevator_ctrl IS
   -- Constants derived from generic
   CONSTANT MAX_FLOOR : INTEGER := N_FLOORS - 1;
 
