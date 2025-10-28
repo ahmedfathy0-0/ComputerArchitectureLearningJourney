@@ -1,0 +1,130 @@
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+USE ieee.numeric_std.ALL;
+
+-- Request Handler for Elevator Controller
+-- Fully asynchronous/combinational design - NO CLOCK NEEDED
+-- Manages floor requests and determines next target floor using SCAN algorithm
+-- Requests are registered immediately, cleared immediately
+-- Direction logic is purely combinational
+
+ENTITY Request_handler IS
+  GENERIC (N : INTEGER := 9); -- Maximum floor number (0 to N)
+  PORT (
+    reset : IN STD_LOGIC;
+    floor_request : IN STD_LOGIC; -- Async pulse for valid floor request
+    floor_number : IN INTEGER RANGE 0 TO N; -- Requested floor number
+    current_floor : IN INTEGER RANGE 0 TO N; -- Current elevator position
+    clear_request : IN STD_LOGIC; -- Signal to clear current floor request
+
+    next_floor : OUT INTEGER RANGE 0 TO N -- Next target floor
+  );
+END ENTITY Request_handler;
+
+ARCHITECTURE behavior OF Request_handler IS
+  -- Store pending requests for each floor
+  SIGNAL pending_requests : STD_LOGIC_VECTOR(N DOWNTO 0) := (OTHERS => '0');
+
+BEGIN
+
+  -- Asynchronous Process: Register and clear floor requests
+  request_management : PROCESS (floor_request, floor_number, clear_request, current_floor, reset)
+    VARIABLE temp_requests : STD_LOGIC_VECTOR(N DOWNTO 0);
+  BEGIN
+    IF reset = '1' THEN
+      -- Reset clears all pending requests
+      pending_requests <= (OTHERS => '0');
+    ELSE
+      -- Start with current state
+      temp_requests := pending_requests;
+
+      -- Register new request immediately
+      IF floor_request = '1' AND floor_number <= N THEN
+        temp_requests(floor_number) := '1';
+      END IF;
+
+      -- Clear request immediately when served
+      IF clear_request = '1' THEN
+        temp_requests(current_floor) := '0';
+      END IF;
+
+      -- Update the signal
+      pending_requests <= temp_requests;
+    END IF;
+  END PROCESS;
+
+  -- Combinational Process: Determine direction and next floor (SCAN algorithm)
+  next_floor_calc : PROCESS (pending_requests, current_floor)
+    TYPE direction_type IS (UP, DOWN, IDLE);
+    VARIABLE direction : direction_type;
+    VARIABLE has_above : BOOLEAN;
+    VARIABLE has_below : BOOLEAN;
+    VARIABLE next_floor_temp : INTEGER RANGE 0 TO N;
+    VARIABLE found : BOOLEAN;
+    VARIABLE i : INTEGER;
+  BEGIN
+    -- Default: stay at current floor (no requests)
+    next_floor_temp := current_floor;
+    direction := IDLE;
+    found := FALSE;
+
+    -- Check for requests above current floor
+    has_above := FALSE;
+    FOR i IN current_floor + 1 TO N LOOP
+      IF pending_requests(i) = '1' THEN
+        has_above := TRUE;
+        EXIT;
+      END IF;
+    END LOOP;
+
+    -- Check for requests below current floor
+    has_below := FALSE;
+    FOR i IN 0 TO current_floor - 1 LOOP
+      IF pending_requests(i) = '1' THEN
+        has_below := TRUE;
+        EXIT;
+      END IF;
+    END LOOP;
+
+    -- Determine direction based on SCAN algorithm
+    -- SCAN: Prefer upward first, then reverse to downward
+
+    IF has_above THEN
+      direction := UP;
+    ELSIF has_below THEN
+      direction := DOWN;
+    ELSE
+      direction := IDLE;
+    END IF;
+
+    -- Find next floor based on direction
+    CASE direction IS
+      WHEN UP =>
+        -- Find closest request above current floor
+        FOR i IN current_floor + 1 TO N LOOP
+          IF pending_requests(i) = '1' AND NOT found THEN
+            next_floor_temp := i;
+            found := TRUE;
+            EXIT; -- Take the closest one
+          END IF;
+        END LOOP;
+
+      WHEN DOWN =>
+        -- Find closest request below current floor
+        FOR i IN current_floor - 1 DOWNTO 0 LOOP
+          IF pending_requests(i) = '1' AND NOT found THEN
+            next_floor_temp := i;
+            found := TRUE;
+            EXIT; -- Take the closest one
+          END IF;
+        END LOOP;
+
+      WHEN IDLE =>
+        -- No requests, stay at current floor
+        next_floor_temp := current_floor;
+    END CASE;
+
+    next_floor <= next_floor_temp;
+  END PROCESS;
+
+END ARCHITECTURE behavior;

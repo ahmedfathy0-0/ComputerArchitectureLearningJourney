@@ -1,0 +1,53 @@
+{
+	"partitions" : [
+		{
+			"name" : "Top",
+			"pins" : [
+				{
+					"name" : "ssd_floor[0]",
+					"strict" : false
+				},
+				{
+					"name" : "ssd_floor[1]",
+					"strict" : false
+				},
+				{
+					"name" : "ssd_floor[2]",
+					"strict" : false
+				},
+				{
+					"name" : "ssd_floor[3]",
+					"strict" : false
+				},
+				{
+					"name" : "ssd_floor[4]",
+					"strict" : false
+				},
+				{
+					"name" : "ssd_floor[5]",
+					"strict" : false
+				},
+				{
+					"name" : "ssd_floor[6]",
+					"strict" : false
+				},
+				{
+					"name" : "floor_select[0]",
+					"strict" : false
+				},
+				{
+					"name" : "floor_select[1]",
+					"strict" : false
+				},
+				{
+					"name" : "floor_select[2]",
+					"strict" : false
+				},
+				{
+					"name" : "floor_select[3]",
+					"strict" : false
+				}
+			]
+		}
+	]
+}

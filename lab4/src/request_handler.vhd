@@ -34,39 +34,13 @@ ARCHITECTURE behavior OF Request_handler IS
   TYPE direction_type IS (UP, DOWN, IDLE);
   SIGNAL direction : direction_type := IDLE;
 
-  -- Helper function: Check if there are any requests above current floor
-  FUNCTION has_requests_above(
-    requests : STD_LOGIC_VECTOR;
-    curr_floor : INTEGER;
-    max_floor : INTEGER
-  ) RETURN BOOLEAN IS
-  BEGIN
-    FOR i IN curr_floor + 1 TO max_floor LOOP
-      IF requests(i) = '1' THEN
-        RETURN TRUE;
-      END IF;
-    END LOOP;
-    RETURN FALSE;
-  END FUNCTION;
-
-  -- Helper function: Check if there are any requests below current floor
-  FUNCTION has_requests_below(
-    requests : STD_LOGIC_VECTOR;
-    curr_floor : INTEGER
-  ) RETURN BOOLEAN IS
-  BEGIN
-    FOR i IN 0 TO curr_floor - 1 LOOP
-      IF requests(i) = '1' THEN
-        RETURN TRUE;
-      END IF;
-    END LOOP;
-    RETURN FALSE;
-  END FUNCTION;
-
 BEGIN
 
   -- Sequential Process: Store requests and maintain direction state
   request_storage : PROCESS (clk, reset)
+    VARIABLE has_above : BOOLEAN;
+    VARIABLE has_below : BOOLEAN;
+    VARIABLE i : INTEGER;
   BEGIN
     IF reset = '1' THEN
       -- Reset clears pending requests and returns direction to IDLE
@@ -88,22 +62,44 @@ BEGIN
       END IF;
 
       -- Step 3: Update direction based on SCAN algorithm
+      -- Check for requests above current floor
+      has_above := FALSE;
+      IF current_floor < N THEN
+        FOR i IN 0 TO N LOOP
+          IF i > current_floor AND pending_requests(i) = '1' THEN
+            has_above := TRUE;
+            EXIT;
+          END IF;
+        END LOOP;
+      END IF;
+
+      -- Check for requests below current floor
+      has_below := FALSE;
+      IF current_floor > 0 THEN
+        FOR i IN 0 TO N LOOP
+          IF i < current_floor AND pending_requests(i) = '1' THEN
+            has_below := TRUE;
+            EXIT;
+          END IF;
+        END LOOP;
+      END IF;
+
       IF pending_requests = (N DOWNTO 0 => '0') THEN
         -- No requests at all
         direction <= IDLE;
 
       ELSIF direction = IDLE THEN
         -- Starting from idle: prefer going up first
-        IF has_requests_above(pending_requests, current_floor, N) THEN
+        IF has_above THEN
           direction <= UP;
-        ELSIF has_requests_below(pending_requests, current_floor) THEN
+        ELSIF has_below THEN
           direction <= DOWN;
         END IF;
 
       ELSIF direction = UP THEN
         -- Continue up if possible, otherwise reverse to down
-        IF NOT has_requests_above(pending_requests, current_floor, N) THEN
-          IF has_requests_below(pending_requests, current_floor) THEN
+        IF NOT has_above THEN
+          IF has_below THEN
             direction <= DOWN;
           ELSE
             direction <= IDLE;
@@ -112,8 +108,8 @@ BEGIN
 
       ELSIF direction = DOWN THEN
         -- Continue down if possible, otherwise reverse to up
-        IF NOT has_requests_below(pending_requests, current_floor) THEN
-          IF has_requests_above(pending_requests, current_floor, N) THEN
+        IF NOT has_below THEN
+          IF has_above THEN
             direction <= UP;
           ELSE
             direction <= IDLE;
@@ -127,6 +123,7 @@ BEGIN
   next_floor_calc : PROCESS (pending_requests, current_floor, direction)
     VARIABLE next_floor_temp : INTEGER RANGE 0 TO N;
     VARIABLE found : BOOLEAN;
+    VARIABLE i : INTEGER;
   BEGIN
     -- Default: stay at current floor (indicates no requests)
     next_floor_temp := current_floor;
@@ -135,8 +132,8 @@ BEGIN
     CASE direction IS
       WHEN UP =>
         -- Find closest request above current floor
-        FOR i IN current_floor + 1 TO N LOOP
-          IF pending_requests(i) = '1' AND NOT found THEN
+        FOR i IN 0 TO N LOOP
+          IF i > current_floor AND pending_requests(i) = '1' AND NOT found THEN
             next_floor_temp := i;
             found := TRUE;
           END IF;
@@ -144,8 +141,8 @@ BEGIN
 
       WHEN DOWN =>
         -- Find closest request below current floor
-        FOR i IN current_floor - 1 DOWNTO 0 LOOP
-          IF pending_requests(i) = '1' AND NOT found THEN
+        FOR i IN N DOWNTO 0 LOOP
+          IF i < current_floor AND pending_requests(i) = '1' AND NOT found THEN
             next_floor_temp := i;
             found := TRUE;
           END IF;
@@ -153,8 +150,8 @@ BEGIN
 
       WHEN IDLE =>
         -- Check upwards first
-        FOR i IN current_floor + 1 TO N LOOP
-          IF pending_requests(i) = '1' AND NOT found THEN
+        FOR i IN 0 TO N LOOP
+          IF i > current_floor AND pending_requests(i) = '1' AND NOT found THEN
             next_floor_temp := i;
             found := TRUE;
           END IF;
@@ -162,8 +159,8 @@ BEGIN
 
         -- If nothing above, check downwards
         IF NOT found THEN
-          FOR i IN current_floor - 1 DOWNTO 0 LOOP
-            IF pending_requests(i) = '1' AND NOT found THEN
+          FOR i IN N DOWNTO 0 LOOP
+            IF i < current_floor AND pending_requests(i) = '1' AND NOT found THEN
               next_floor_temp := i;
               found := TRUE;
             END IF;

@@ -1,0 +1,52 @@
+|test_ssd
+floor_select[0] => ssd:ssd_inst.binary_in[0]
+floor_select[1] => ssd:ssd_inst.binary_in[1]
+floor_select[2] => ssd:ssd_inst.binary_in[2]
+floor_select[3] => ssd:ssd_inst.binary_in[3]
+ssd_floor[0] <= ssd:ssd_inst.ssd_out[0]
+ssd_floor[1] <= ssd:ssd_inst.ssd_out[1]
+ssd_floor[2] <= ssd:ssd_inst.ssd_out[2]
+ssd_floor[3] <= ssd:ssd_inst.ssd_out[3]
+ssd_floor[4] <= ssd:ssd_inst.ssd_out[4]
+ssd_floor[5] <= ssd:ssd_inst.ssd_out[5]
+ssd_floor[6] <= ssd:ssd_inst.ssd_out[6]
+
+
+|test_ssd|ssd:ssd_inst
+binary_in[0] => Mux0.IN19
+binary_in[0] => Mux1.IN19
+binary_in[0] => Mux2.IN19
+binary_in[0] => Mux3.IN19
+binary_in[0] => Mux4.IN19
+binary_in[0] => Mux5.IN19
+binary_in[0] => Mux6.IN19
+binary_in[1] => Mux0.IN18
+binary_in[1] => Mux1.IN18
+binary_in[1] => Mux2.IN18
+binary_in[1] => Mux3.IN18
+binary_in[1] => Mux4.IN18
+binary_in[1] => Mux5.IN18
+binary_in[1] => Mux6.IN18
+binary_in[2] => Mux0.IN17
+binary_in[2] => Mux1.IN17
+binary_in[2] => Mux2.IN17
+binary_in[2] => Mux3.IN17
+binary_in[2] => Mux4.IN17
+binary_in[2] => Mux5.IN17
+binary_in[2] => Mux6.IN17
+binary_in[3] => Mux0.IN16
+binary_in[3] => Mux1.IN16
+binary_in[3] => Mux2.IN16
+binary_in[3] => Mux3.IN16
+binary_in[3] => Mux4.IN16
+binary_in[3] => Mux5.IN16
+binary_in[3] => Mux6.IN16
+ssd_out[0] <= Mux6.DB_MAX_OUTPUT_PORT_TYPE
+ssd_out[1] <= Mux5.DB_MAX_OUTPUT_PORT_TYPE
+ssd_out[2] <= Mux4.DB_MAX_OUTPUT_PORT_TYPE
+ssd_out[3] <= Mux3.DB_MAX_OUTPUT_PORT_TYPE
+ssd_out[4] <= Mux2.DB_MAX_OUTPUT_PORT_TYPE
+ssd_out[5] <= Mux1.DB_MAX_OUTPUT_PORT_TYPE
+ssd_out[6] <= Mux0.DB_MAX_OUTPUT_PORT_TYPE
+
+

@@ -1,0 +1,12 @@
+
+State Machine - |elevator_system_hw|Elevator_system:elevator_inst|Elevator_controller:elevator_controller_inst|state
+Name state.DOOR_OPEN state.MOVING state.IDLE 
+state.IDLE 0 0 0 
+state.MOVING 0 1 1 
+state.DOOR_OPEN 1 0 1 
+
+State Machine - |elevator_system_hw|Elevator_system:elevator_inst|Request_handler:request_handler_inst|direction
+Name direction.UP direction.DOWN direction.IDLE 
+direction.IDLE 0 0 0 
+direction.DOWN 0 1 1 
+direction.UP 1 0 1 
