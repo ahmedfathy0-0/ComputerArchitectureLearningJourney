@@ -10,12 +10,8 @@
 vlib work
 
 # Compile all required files (from src and test directories)
-# Order matters: compile dependencies first
-vcom -93 src/elevator_types.vhd
 vcom -93 src/timer.vhd
 vcom -93 src/ssd.vhd
-vcom -93 src/request_manager.vhd
-vcom -93 src/scan_scheduler.vhd
 vcom -93 src/elevator_fsm.vhd
 vcom -93 test/tb_elevator_fsm.vhd
 
