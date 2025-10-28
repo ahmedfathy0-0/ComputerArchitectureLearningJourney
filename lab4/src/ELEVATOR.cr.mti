@@ -1,15 +1,12 @@
-C:/Users/youss/Downloads/ComputerArchitectureLearningJourney/lab4/src/timer.vhd {0 {vcom -work work -2002 -explicit -stats=none C:/Users/youss/Downloads/ComputerArchitectureLearningJourney/lab4/src/timer.vhd
+C:/Users/youss/Downloads/ComputerArchitectureLearningJourney/lab4/src/timer.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/youss/Downloads/ComputerArchitectureLearningJourney/lab4/src/timer.vhd
 Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
 -- Loading package STANDARD
 -- Loading package TEXTIO
 -- Loading package std_logic_1164
 -- Compiling entity timer
 -- Compiling architecture rtl of timer
-** Error: C:/Users/youss/Downloads/ComputerArchitectureLearningJourney/lab4/src/timer.vhd(30): (vcom-1581) No feasible entries for infix operator '='.
-** Error: C:/Users/youss/Downloads/ComputerArchitectureLearningJourney/lab4/src/timer.vhd(30): Type error resolving infix expression "=" as type std.STANDARD.BOOLEAN.
-** Error: C:/Users/youss/Downloads/ComputerArchitectureLearningJourney/lab4/src/timer.vhd(45): VHDL Compiler exiting
 
-} {8.0 11.0} {}} C:/Users/youss/Downloads/ComputerArchitectureLearningJourney/lab4/src/ssd.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/youss/Downloads/ComputerArchitectureLearningJourney/lab4/src/ssd.vhd
+} {} {}} C:/Users/youss/Downloads/ComputerArchitectureLearningJourney/lab4/src/ssd.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/youss/Downloads/ComputerArchitectureLearningJourney/lab4/src/ssd.vhd
 Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
 -- Loading package STANDARD
 -- Loading package TEXTIO
