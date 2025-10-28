@@ -25,7 +25,8 @@ vcom -2008 -work work ../src/elevator_system.vhd
 
 # Start simulation with reduced clock frequency for faster testing
 # Using CLOCK_FREQ=100 instead of 50MHz (50_000_000) for practical simulation time
-vsim -voptargs=+acc work.elevator_system -GCLOCK_FREQ=100
+# Using MAX_FLOOR=9 for 10 floors (0-9)
+vsim -voptargs=+acc work.elevator_system -GCLOCK_FREQ=100 -GMAX_FLOOR=9
 
 # Configure wave window
 echo "Configuring wave window..."

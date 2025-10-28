@@ -9,13 +9,17 @@ vcom -93 ../src/timer.vhd
 vcom -93 ../src/ssd.vhd
 vcom -93 ../src/fsm.vhd
 
-# Start simulation with small timer for fast testing
+# Start simulation with small timer for fast testing and N_FLOORS=10 (default)
 # Clock period = 200ms means frequency = 5Hz
 # CLOCK_FREQ=5 means timer counts 5 cycles for DURATION_SEC=1
 # So door stays open for 10 clock cycles (2 seconds in real time)
-vsim work.elevator_fsm -g/door_timer_inst/CLOCK_FREQ=5 -g/door_timer_inst/DURATION_SEC=2
+vsim -g N_FLOORS=10 work.elevator_fsm -g/door_timer_inst/CLOCK_FREQ=5 -g/door_timer_inst/DURATION_SEC=2
 
 # Add waves to waveform viewer
+add wave -divider "Generics/Constants"
+add wave -format literal -radix unsigned /elevator_fsm/N_FLOORS
+add wave -format literal -radix unsigned /elevator_fsm/MAX_FLOOR
+
 add wave -divider "Clock and Reset"
 add wave -format logic /elevator_fsm/clk
 add wave -format logic /elevator_fsm/reset

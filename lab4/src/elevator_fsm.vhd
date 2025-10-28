@@ -3,10 +3,13 @@ USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 
 ENTITY elevator_fsm IS
+  GENERIC (
+    N_FLOORS : INTEGER := 10 -- Number of floors (default 10: floors 0-9)
+  );
   PORT (
     clk : IN STD_LOGIC;
     reset : IN STD_LOGIC;
-    floor_request : IN STD_LOGIC_VECTOR(3 DOWNTO 0); -- 4-bit binary (0-9)
+    floor_request : IN STD_LOGIC_VECTOR(3 DOWNTO 0); -- 4-bit binary (0 to N_FLOORS-1)
     request_valid : IN STD_LOGIC;
     seven_segment : OUT STD_LOGIC_VECTOR(6 DOWNTO 0);
     current_floor : OUT INTEGER RANGE 0 TO 9;
@@ -15,8 +18,11 @@ ENTITY elevator_fsm IS
 END ENTITY elevator_fsm;
 
 ARCHITECTURE behavioral OF elevator_fsm IS
+  -- Constants derived from generic
+  CONSTANT MAX_FLOOR : INTEGER := N_FLOORS - 1;
+
   -- Pending requests storage, cleared when reset is high
-  SIGNAL pending_requests : STD_LOGIC_VECTOR(9 DOWNTO 0) := (OTHERS => '0');
+  SIGNAL pending_requests : STD_LOGIC_VECTOR(N_FLOORS - 1 DOWNTO 0) := (OTHERS => '0');
 
   TYPE state_type IS (IDLE, MV_UP, MV_DN, DOOR_OPEN);
   SIGNAL current_state, next_state : state_type;
@@ -100,17 +106,11 @@ BEGIN
   ssd_binary_in <= STD_LOGIC_VECTOR(to_unsigned(current_floor_internal, 4));
 
   -- Main state machine process
-  PROCESS (clk, reset, request_valid, floor_request, door_timer_done, move_timer_done)
+  PROCESS (clk, reset)
     VARIABLE has_above : BOOLEAN;
     VARIABLE has_below : BOOLEAN;
   BEGIN
 
-    -- Update pending requests
-    IF request_valid = '1' THEN
-      IF to_integer(unsigned(floor_request)) <= 9 THEN
-        pending_requests(to_integer(unsigned(floor_request))) <= '1';
-      END IF;
-    END IF;
     IF reset = '1' THEN
       current_state <= IDLE;
       current_floor_internal <= 0;
@@ -122,34 +122,39 @@ BEGIN
       move_timer_enable <= '0';
       direction <= IDLE;
     ELSIF rising_edge(clk) THEN
+      -- Update pending requests
+      IF request_valid = '1' THEN
+        IF to_integer(unsigned(floor_request)) <= MAX_FLOOR THEN
+          pending_requests(to_integer(unsigned(floor_request))) <= '1';
+        END IF;
+      END IF;
+
       -- Clear the request for current floor when door opens and timer is done
       IF current_state = DOOR_OPEN AND door_timer_done = '1' THEN
         pending_requests(current_floor_internal) <= '0';
       END IF;
 
       -- Target floor selection logic using SCAN algorithm
-      IF pending_requests /= "0000000000" THEN
+      IF pending_requests /= (pending_requests'RANGE => '0') THEN
         CASE direction IS
           WHEN UP =>
             -- Look for requests above current floor
             has_above := FALSE;
-            FOR i IN current_floor_internal + 1 TO 9 LOOP
-              IF pending_requests(i) = '1' THEN
+            FOR i IN 0 TO MAX_FLOOR LOOP
+              IF i > current_floor_internal AND pending_requests(i) = '1' AND NOT has_above THEN
                 target_floor <= i;
                 has_above := TRUE;
-                EXIT;
               END IF;
             END LOOP;
 
             -- If no requests above, look below and change direction
             IF NOT has_above THEN
               has_below := FALSE;
-              FOR i IN current_floor_internal - 1 DOWNTO 0 LOOP
-                IF pending_requests(i) = '1' THEN
-                  target_floor <= i;
+              FOR i IN 0 TO MAX_FLOOR LOOP
+                IF i < current_floor_internal AND pending_requests(MAX_FLOOR - i) = '1' AND NOT has_below THEN
+                  target_floor <= MAX_FLOOR - i;
                   direction <= DOWN;
                   has_below := TRUE;
-                  EXIT;
                 END IF;
               END LOOP;
             END IF;
@@ -157,30 +162,28 @@ BEGIN
           WHEN DOWN =>
             -- Look for requests below current floor
             has_below := FALSE;
-            FOR i IN current_floor_internal - 1 DOWNTO 0 LOOP
-              IF pending_requests(i) = '1' THEN
-                target_floor <= i;
+            FOR i IN 0 TO MAX_FLOOR LOOP
+              IF i < current_floor_internal AND pending_requests(current_floor_internal - 1 - i) = '1' AND NOT has_below THEN
+                target_floor <= current_floor_internal - 1 - i;
                 has_below := TRUE;
-                EXIT;
               END IF;
             END LOOP;
 
             -- If no requests below, look above and change direction
             IF NOT has_below THEN
               has_above := FALSE;
-              FOR i IN current_floor_internal + 1 TO 9 LOOP
-                IF pending_requests(i) = '1' THEN
+              FOR i IN 0 TO MAX_FLOOR LOOP
+                IF i > current_floor_internal AND pending_requests(i) = '1' AND NOT has_above THEN
                   target_floor <= i;
                   direction <= UP;
                   has_above := TRUE;
-                  EXIT;
                 END IF;
               END LOOP;
             END IF;
 
           WHEN IDLE =>
             -- No direction set, find any request and set initial direction
-            FOR i IN 0 TO 9 LOOP
+            FOR i IN 0 TO MAX_FLOOR LOOP
               IF pending_requests(i) = '1' THEN
                 target_floor <= i;
                 IF i > current_floor_internal THEN
@@ -256,7 +259,7 @@ BEGIN
   BEGIN
     CASE current_state IS
       WHEN IDLE =>
-        IF pending_requests /= "0000000000" THEN
+        IF pending_requests /= (pending_requests'RANGE => '0') THEN
           IF current_floor_internal < target_floor THEN
             next_state <= MV_UP;
           ELSIF current_floor_internal > target_floor THEN

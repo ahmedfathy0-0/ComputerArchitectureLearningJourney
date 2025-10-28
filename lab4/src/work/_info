@@ -31,7 +31,7 @@ n@_opt
 OL;O;2024.3;79
 R2
 Eelevator_fsm
-Z3 w1761666108
+Z3 w1761668023
 Z4 DPx4 ieee 11 numeric_std 0 22 :ASDNFgHXf_ih3J@9F3Ze1
 Z5 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
 Z6 DPx4 ieee 14 std_logic_1164 0 22 eNV`TJ_GofJTzYa?f<@Oe1
@@ -40,13 +40,13 @@ Z8 8elevator_fsm.vhd
 Z9 Felevator_fsm.vhd
 l0
 L5
-VTQcJPCSF4jb:U@SZhYjcg3
-!s100 ^[6jio:JSnXhZ<8kDFWbY2
+V]^AH26cBPGK<jn88PACSg1
+!s100 z_FnI^SFTXbI`I1?YlM7a1
 Z10 OV;C;10.5b;63
 31
-Z11 !s110 1761666118
+Z11 !s110 1761668628
 !i10b 1
-Z12 !s108 1761666118.000000
+Z12 !s108 1761668628.000000
 Z13 !s90 -reportprogress|300|-93|elevator_fsm.vhd|
 Z14 !s107 elevator_fsm.vhd|
 !i113 1
@@ -56,11 +56,11 @@ Abehavioral
 R4
 R5
 R6
-DEx4 work 12 elevator_fsm 0 22 TQcJPCSF4jb:U@SZhYjcg3
-l65
-L17
-V[]19[B61]K]kc>8G90=WZ2
-Z16 !s100 VXIhh14><gXR9Xf>BZ4901
+Z16 DEx4 work 12 elevator_fsm 0 22 ]^AH26cBPGK<jn88PACSg1
+l71
+L20
+Z17 V1SNSRK=o5CHz:jBkAB4GI0
+Z18 !s100 EUIWH=9RRmhOB_oQ`Zlh^1
 R10
 31
 R11
@@ -72,26 +72,26 @@ R14
 o-93
 R15
 Eelevator_fsm_tb
-Z17 w1761656805
+Z19 w1761656805
 R4
 R5
 R6
 R7
-Z18 8elevator_fsm_tb.vhd
-Z19 Felevator_fsm_tb.vhd
+Z20 8elevator_fsm_tb.vhd
+Z21 Felevator_fsm_tb.vhd
 l0
 L6
 V[EB_ozm1lHj_hi>^HnF`T1
 !s100 0aRFNP?e0S4TA8ac3=loa3
 R10
 33
-Z20 !s110 1761656874
+Z22 !s110 1761656874
 !i10b 1
-Z21 !s108 1761656874.000000
-Z22 !s90 -reportprogress|300|-2008|elevator_fsm_tb.vhd|
-Z23 !s107 elevator_fsm_tb.vhd|
+Z23 !s108 1761656874.000000
+Z24 !s90 -reportprogress|300|-2008|elevator_fsm_tb.vhd|
+Z25 !s107 elevator_fsm_tb.vhd|
 !i113 1
-Z24 o-2008
+Z26 o-2008
 R15
 Atestbench
 R4
@@ -104,22 +104,22 @@ Vc62TS1ImJdXCjFE:cl_OX2
 !s100 =cl^[;6RUK7ZFI?XJSbj;3
 R10
 33
-R20
-!i10b 1
-R21
 R22
+!i10b 1
 R23
-!i113 1
 R24
+R25
+!i113 1
+R26
 R15
 Essd
-Z25 w1761635029
+Z27 w1761635029
 R4
 R5
 R6
 R7
-Z26 8ssd.vhd
-Z27 Fssd.vhd
+Z28 8ssd.vhd
+Z29 Fssd.vhd
 l0
 L18
 VBVX`3IUnC?_1Neek60GIO3
@@ -129,8 +129,8 @@ R10
 R11
 !i10b 1
 R12
-Z28 !s90 -reportprogress|300|-93|ssd.vhd|
-Z29 !s107 ssd.vhd|
+Z30 !s90 -reportprogress|300|-93|ssd.vhd|
+Z31 !s107 ssd.vhd|
 !i113 1
 o-93
 R15
@@ -148,18 +148,18 @@ R10
 R11
 !i10b 1
 R12
-R28
-R29
+R30
+R31
 !i113 1
 o-93
 R15
 Etimer
-Z30 w1761665393
+Z32 w1761665393
 R5
 R6
 R7
-Z31 8timer.vhd
-Z32 Ftimer.vhd
+Z33 8timer.vhd
+Z34 Ftimer.vhd
 l0
 L4
 VlTn3iIO6>E37h61co44WS2
@@ -169,8 +169,8 @@ R10
 R11
 !i10b 1
 R12
-Z33 !s90 -reportprogress|300|-93|timer.vhd|
-Z34 !s107 timer.vhd|
+Z35 !s90 -reportprogress|300|-93|timer.vhd|
+Z36 !s107 timer.vhd|
 !i113 1
 o-93
 R15
@@ -187,8 +187,8 @@ R10
 R11
 !i10b 1
 R12
-R33
-R34
+R35
+R36
 !i113 1
 o-93
 R15
