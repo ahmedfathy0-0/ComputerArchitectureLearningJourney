@@ -14,6 +14,9 @@ cd ../src || exit 1
 echo "Compiling timer..."
 ghdl -a --std=08 timer.vhd
 
+echo "Compiling ssd..."
+ghdl -a --std=08 ssd.vhd
+
 echo "Compiling elevator_controller..."
 ghdl -a --std=08 elevator_controller.vhd
 

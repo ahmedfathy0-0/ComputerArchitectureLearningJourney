@@ -1,5 +1,6 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
+USE ieee.numeric_std.ALL;
 USE work.elevator_types.ALL;
 
 -- Top-level Elevator System
@@ -13,6 +14,7 @@ USE work.elevator_types.ALL;
 -- Output Interface:
 --   current_floor: Current elevator position (0-9)
 --   door_state: Current door state (DOOR_OPEN or DOOR_CLOSED)
+--   ssd_floor: Seven segment display output for current floor (active low)
 --
 -- Behavior:
 --   - User sets floor using 4 switches (binary 0-9)
@@ -33,7 +35,8 @@ ENTITY Elevator_system IS
     request_button : IN STD_LOGIC; -- Push button to register request
 
     current_floor : OUT INTEGER RANGE 0 TO MAX_FLOOR; -- Current floor
-    door_state : OUT door_state_type -- Door status (DOOR_OPEN/DOOR_CLOSED)
+    door_state : OUT door_state_type; -- Door status (DOOR_OPEN/DOOR_CLOSED)
+    ssd_floor : OUT STD_LOGIC_VECTOR(6 DOWNTO 0) -- Seven segment display (active low)
   );
 END ENTITY Elevator_system;
 
@@ -70,11 +73,19 @@ ARCHITECTURE structural OF Elevator_system IS
     );
   END COMPONENT;
 
+  COMPONENT ssd
+    PORT (
+      binary_in : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+      ssd_out : OUT STD_LOGIC_VECTOR(6 DOWNTO 0)
+    );
+  END COMPONENT;
+
   -- Internal signals
   SIGNAL current_floor_internal : INTEGER RANGE 0 TO MAX_FLOOR;
   SIGNAL next_floor_internal : INTEGER RANGE 0 TO MAX_FLOOR;
   SIGNAL clear_request_internal : STD_LOGIC;
   SIGNAL enable_internal : STD_LOGIC;
+  SIGNAL floor_binary : STD_LOGIC_VECTOR(3 DOWNTO 0);
 
 BEGIN
 
@@ -111,8 +122,17 @@ BEGIN
     clear_request => clear_request_internal
   );
 
+  -- Seven Segment Display Instance
+  -- Converts current floor number to seven segment display format
+  ssd_inst : ssd
+  PORT MAP(
+    binary_in => floor_binary,
+    ssd_out => ssd_floor
+  );
+
   -- Output assignments
   current_floor <= current_floor_internal;
+  floor_binary <= STD_LOGIC_VECTOR(to_unsigned(current_floor_internal, 4));
 
   -- Enable logic: Elevator should move when there are pending requests
   -- (i.e., when next_floor differs from current_floor)

@@ -23,7 +23,8 @@ ARCHITECTURE behavior OF tb_elevator_system IS
       floor_select : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
       request_button : IN STD_LOGIC;
       current_floor : OUT INTEGER RANGE 0 TO 9;
-      door_state : OUT door_state_type
+      door_state : OUT door_state_type;
+      ssd_floor : OUT STD_LOGIC_VECTOR(6 DOWNTO 0)
     );
   END COMPONENT;
 
@@ -34,6 +35,7 @@ ARCHITECTURE behavior OF tb_elevator_system IS
   SIGNAL request_button : STD_LOGIC := '0';
   SIGNAL current_floor : INTEGER RANGE 0 TO 9;
   SIGNAL door_state : door_state_type;
+  SIGNAL ssd_floor : STD_LOGIC_VECTOR(6 DOWNTO 0);
 
   -- Clock period
   CONSTANT clk_period : TIME := 20 ns; -- 50 MHz
@@ -55,7 +57,8 @@ BEGIN
     floor_select => floor_select,
     request_button => request_button,
     current_floor => current_floor,
-    door_state => door_state
+    door_state => door_state,
+    ssd_floor => ssd_floor
   );
 
   -- Clock process
