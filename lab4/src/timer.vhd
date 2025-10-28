@@ -22,7 +22,7 @@ ENTITY timer IS
 END timer;
 
 ARCHITECTURE rtl OF timer IS
-    SIGNAL counter : INTEGER RANGE 0 TO MAX_COUNT := 0;
+    SIGNAL counter : INTEGER RANGE 0 TO CLOCK_FREQ * DURATION_SEC - 1 := 0;
 BEGIN
     -- Single counter for the entire duration
     PROCESS (clk, reset)
@@ -32,13 +32,13 @@ BEGIN
         ELSIF rising_edge(clk) THEN
             IF enable = '0' THEN
                 counter <= 0; -- Reset when disabled
-            ELSIF counter < MAX_COUNT THEN
+            ELSIF counter < CLOCK_FREQ * DURATION_SEC - 1 THEN
                 counter <= counter + 1;
             END IF;
         END IF;
     END PROCESS;
 
-    done <= '1' WHEN counter = MAX_COUNT ELSE
+    done <= '1' WHEN counter = CLOCK_FREQ * DURATION_SEC - 1 ELSE
         '0';
 
 END rtl;

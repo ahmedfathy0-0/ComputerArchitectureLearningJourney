@@ -1,0 +1,41 @@
+[N
+5
+2
+5 timer
+1
+74 C:/Users/youss/Downloads/ComputerArchitectureLearningJourney/lab4/src/work
+3
+3 rtl
+4
+10 CLOCK_FREQ
+5
+12 DURATION_SEC
+]
+[G
+1
+2
+3
+1
+5
+1
+0
+2
+0
+0 0
+0
+0
+]
+[G
+1
+2
+3
+1
+4
+1
+0
+50000000
+0
+0 0
+0
+0
+]

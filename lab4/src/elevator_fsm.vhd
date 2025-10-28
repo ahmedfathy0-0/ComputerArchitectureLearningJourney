@@ -82,11 +82,19 @@ BEGIN
   ssd_binary_in <= STD_LOGIC_VECTOR(to_unsigned(current_floor_internal, 4));
 
   -- Main state machine process
-  PROCESS (clk, reset)
+  PROCESS (clk, reset, request_valid, floor_request, timer_done)
     VARIABLE has_above : BOOLEAN;
     VARIABLE has_below : BOOLEAN;
     VARIABLE next_floor : INTEGER RANGE 0 TO 9;
   BEGIN
+
+    -- Update pending requests
+    IF request_valid = '1' THEN
+      IF to_integer(unsigned(floor_request)) <= 9 THEN
+        pending_requests(to_integer(unsigned(floor_request))) <= '1';
+      END IF;
+    END IF;
+
     IF reset = '1' THEN
       current_state <= IDLE;
       current_floor_internal <= 0;
@@ -97,13 +105,6 @@ BEGIN
       direction <= IDLE;
     ELSIF rising_edge(clk) THEN
       current_state <= next_state;
-
-      -- Update pending requests
-      IF request_valid = '1' THEN
-        IF to_integer(unsigned(floor_request)) <= 9 THEN
-          pending_requests(to_integer(unsigned(floor_request))) <= '1';
-        END IF;
-      END IF;
 
       -- Clear the request for current floor when door opens and timer is done
       IF current_state = DOOR_OPEN AND timer_done = '1' THEN
