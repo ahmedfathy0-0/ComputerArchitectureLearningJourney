@@ -8,42 +8,165 @@ z2
 !i10f 100
 cModel Technology
 dC:/intelFPGA/18.1
-Etimer
-Z0 w1761651199
-Z1 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
-Z2 DPx4 ieee 14 std_logic_1164 0 22 eNV`TJ_GofJTzYa?f<@Oe1
-Z3 dC:/Users/youss/Downloads/ComputerArchitectureLearningJourney/lab4/src
-Z4 8C:/Users/youss/Downloads/ComputerArchitectureLearningJourney/lab4/src/timer.vhd
-Z5 FC:/Users/youss/Downloads/ComputerArchitectureLearningJourney/lab4/src/timer.vhd
+Eelevator_fsm
+Z0 w1761655461
+Z1 DPx4 ieee 11 numeric_std 0 22 :ASDNFgHXf_ih3J@9F3Ze1
+Z2 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
+Z3 DPx4 ieee 14 std_logic_1164 0 22 eNV`TJ_GofJTzYa?f<@Oe1
+Z4 dC:/Users/youss/Downloads/ComputerArchitectureLearningJourney/lab4/src
+Z5 8elevator_fsm.vhd
+Z6 Felevator_fsm.vhd
 l0
-L11
-V=:oCO@HnVi7h2G8G:cWS00
-!s100 kG575c:Z<G`kgWY11D@OI1
-Z6 OV;C;10.5b;63
-32
-Z7 !s110 1761651268
+L5
+VkUoMYJDacaz]eMOEjQn=K2
+!s100 ^[6jio:JSnXhZ<8kDFWbY2
+Z7 OV;C;10.5b;63
+33
+Z8 !s110 1761657288
 !i10b 1
-Z8 !s108 1761651268.000000
-Z9 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/youss/Downloads/ComputerArchitectureLearningJourney/lab4/src/timer.vhd|
-Z10 !s107 C:/Users/youss/Downloads/ComputerArchitectureLearningJourney/lab4/src/timer.vhd|
+Z9 !s108 1761657288.000000
+Z10 !s90 -reportprogress|300|-2008|elevator_fsm.vhd|
+Z11 !s107 elevator_fsm.vhd|
 !i113 1
-Z11 o-work work -2002 -explicit
-Z12 tExplicit 1 CvgOpt 0
-Artl
+Z12 o-2008
+Z13 tExplicit 1 CvgOpt 0
+Abehavioral
 R1
 R2
-Z13 DEx4 work 5 timer 0 22 =:oCO@HnVi7h2G8G:cWS00
-l27
-L24
-V[z]8Oz;Bm>Y1G3IK4Vzdd1
-!s100 <^J]VE@KhHa3W]iG7kbVH1
-R6
-32
+R3
+Z14 DEx4 work 12 elevator_fsm 0 22 kUoMYJDacaz]eMOEjQn=K2
+l60
+L17
+Z15 V@7_<WdAlQni8lFBdPieRK2
+Z16 !s100 DP]g7gzLeZA09=>QWlzfI3
 R7
-!i10b 1
+33
 R8
+!i10b 1
 R9
 R10
-!i113 1
 R11
+!i113 1
 R12
+R13
+Eelevator_fsm_tb
+Z17 w1761656805
+R1
+R2
+R3
+R4
+Z18 8elevator_fsm_tb.vhd
+Z19 Felevator_fsm_tb.vhd
+l0
+L6
+V[EB_ozm1lHj_hi>^HnF`T1
+!s100 0aRFNP?e0S4TA8ac3=loa3
+R7
+33
+Z20 !s110 1761656874
+!i10b 1
+Z21 !s108 1761656874.000000
+Z22 !s90 -reportprogress|300|-2008|elevator_fsm_tb.vhd|
+Z23 !s107 elevator_fsm_tb.vhd|
+!i113 1
+R12
+R13
+Atestbench
+R1
+R2
+R3
+DEx4 work 15 elevator_fsm_tb 0 22 [EB_ozm1lHj_hi>^HnF`T1
+l39
+L9
+Vc62TS1ImJdXCjFE:cl_OX2
+!s100 =cl^[;6RUK7ZFI?XJSbj;3
+R7
+33
+R20
+!i10b 1
+R21
+R22
+R23
+!i113 1
+R12
+R13
+Essd
+Z24 w1761635029
+R1
+R2
+R3
+R4
+Z25 8ssd.vhd
+Z26 Fssd.vhd
+l0
+L18
+V=:S[L<n5B91GAPI8<]TGK2
+!s100 @W;<M0XgNK>?zE3z5K:^F0
+R7
+33
+R8
+!i10b 1
+R9
+Z27 !s90 -reportprogress|300|-2008|ssd.vhd|
+Z28 !s107 ssd.vhd|
+!i113 1
+R12
+R13
+Abehavior
+R1
+R2
+R3
+DEx4 work 3 ssd 0 22 =:S[L<n5B91GAPI8<]TGK2
+l26
+L25
+VUd>D=^jhN3MMb>S?D9Q:S3
+!s100 P0XPEnQSBh`AbK>QA3OGd3
+R7
+33
+R8
+!i10b 1
+R9
+R27
+R28
+!i113 1
+R12
+R13
+Etimer
+Z29 w1761651803
+R2
+R3
+R4
+Z30 8timer.vhd
+Z31 Ftimer.vhd
+l0
+L11
+V_Ddi00HBJBF8`dI`KfW7X0
+!s100 kG575c:Z<G`kgWY11D@OI1
+R7
+33
+R8
+!i10b 1
+R9
+Z32 !s90 -reportprogress|300|-2008|timer.vhd|
+Z33 !s107 timer.vhd|
+!i113 1
+R12
+R13
+Artl
+R2
+R3
+DEx4 work 5 timer 0 22 _Ddi00HBJBF8`dI`KfW7X0
+l27
+L24
+VC1VMKck3`QPAXHiLbPSe_3
+!s100 <^J]VE@KhHa3W]iG7kbVH1
+R7
+33
+R8
+!i10b 1
+R9
+R32
+R33
+!i113 1
+R12
+R13

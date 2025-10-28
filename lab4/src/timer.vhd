@@ -6,8 +6,8 @@ USE ieee.std_logic_1164.ALL;
 --  1.1. Set enable = 0 to stop/resume the timer
 -- 2. When 'done' output goes high, the specified duration has elapsed.
 -- 3. Set reset = 1 to reset the timer.
-
 -- Separate timer entity
+
 ENTITY timer IS
     GENERIC (
         CLOCK_FREQ : INTEGER := 50_000_000;
