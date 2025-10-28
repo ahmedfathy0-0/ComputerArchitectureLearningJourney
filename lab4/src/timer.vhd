@@ -22,7 +22,6 @@ ENTITY timer IS
 END timer;
 
 ARCHITECTURE rtl OF timer IS
-    CONSTANT MAX_COUNT : INTEGER := CLOCK_FREQ * DURATION_SEC - 1;
     SIGNAL counter : INTEGER RANGE 0 TO MAX_COUNT := 0;
 BEGIN
     -- Single counter for the entire duration

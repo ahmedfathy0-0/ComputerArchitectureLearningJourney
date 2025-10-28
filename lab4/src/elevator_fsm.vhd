@@ -83,6 +83,9 @@ BEGIN
 
   -- Main state machine process
   PROCESS (clk, reset)
+    VARIABLE has_above : BOOLEAN;
+    VARIABLE has_below : BOOLEAN;
+    VARIABLE next_floor : INTEGER RANGE 0 TO 9;
   BEGIN
     IF reset = '1' THEN
       current_state <= IDLE;
@@ -96,17 +99,13 @@ BEGIN
       current_state <= next_state;
 
       -- Update pending requests
-      -- Convert 4-bit floor_request to one-hot encoding and register it
       IF request_valid = '1' THEN
-        -- Example: floor_request = "1001" (binary 9) sets pending_requests(9) = '1'
-        -- Pending_requests: 0000001001 (requests for floors 0 and 3)
-        -- Floor_request:    "1000" (binary 8 for floor 8)
         IF to_integer(unsigned(floor_request)) <= 9 THEN
           pending_requests(to_integer(unsigned(floor_request))) <= '1';
         END IF;
       END IF;
 
-      -- Clear the request for current floor when door opens
+      -- Clear the request for current floor when door opens and timer is done
       IF current_state = DOOR_OPEN AND timer_done = '1' THEN
         pending_requests(current_floor_internal) <= '0';
       END IF;
@@ -116,40 +115,48 @@ BEGIN
       IF pending_requests /= "0000000000" THEN
         CASE direction IS
           WHEN UP =>
-            -- First, look for requests above current floor (continuing upward)
-            target_floor <= 9; -- Default to top if nothing found
+            -- Look for requests above current floor (continuing upward)
+            has_above := FALSE;
             FOR i IN current_floor_internal + 1 TO 9 LOOP
               IF pending_requests(i) = '1' THEN
                 target_floor <= i;
+                has_above := TRUE;
                 EXIT;
               END IF;
             END LOOP;
+
             -- If no requests above, look below and change direction
-            IF target_floor = 9 AND pending_requests(9) = '0' THEN
+            IF NOT has_above THEN
+              has_below := FALSE;
               FOR i IN current_floor_internal - 1 DOWNTO 0 LOOP
                 IF pending_requests(i) = '1' THEN
                   target_floor <= i;
                   direction <= DOWN;
+                  has_below := TRUE;
                   EXIT;
                 END IF;
               END LOOP;
             END IF;
 
           WHEN DOWN =>
-            -- First, look for requests below current floor (continuing downward)
-            target_floor <= 0; -- Default to bottom if nothing found
+            -- Look for requests below current floor (continuing downward)
+            has_below := FALSE;
             FOR i IN current_floor_internal - 1 DOWNTO 0 LOOP
               IF pending_requests(i) = '1' THEN
                 target_floor <= i;
+                has_below := TRUE;
                 EXIT;
               END IF;
             END LOOP;
+
             -- If no requests below, look above and change direction
-            IF target_floor = 0 AND pending_requests(0) = '0' THEN
+            IF NOT has_below THEN
+              has_above := FALSE;
               FOR i IN current_floor_internal + 1 TO 9 LOOP
                 IF pending_requests(i) = '1' THEN
                   target_floor <= i;
                   direction <= UP;
+                  has_above := TRUE;
                   EXIT;
                 END IF;
               END LOOP;
@@ -206,12 +213,16 @@ BEGIN
   BEGIN
     CASE current_state IS
       WHEN IDLE =>
-        IF current_floor_internal < target_floor THEN
-          next_state <= MV_UP;
-        ELSIF current_floor_internal > target_floor THEN
-          next_state <= MV_DN;
-        ELSIF current_floor_internal = target_floor AND pending_requests(target_floor) = '1' THEN
-          next_state <= DOOR_OPEN;
+        IF pending_requests /= "0000000000" THEN
+          IF current_floor_internal < target_floor THEN
+            next_state <= MV_UP;
+          ELSIF current_floor_internal > target_floor THEN
+            next_state <= MV_DN;
+          ELSIF current_floor_internal = target_floor AND pending_requests(target_floor) = '1' THEN
+            next_state <= DOOR_OPEN;
+          ELSE
+            next_state <= IDLE;
+          END IF;
         ELSE
           next_state <= IDLE;
         END IF;
