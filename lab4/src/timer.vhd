@@ -1,13 +1,6 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 
--- Usage:
--- 1. Set reset = 0 and enable = 1 to start the timer.
---  1.1. Set enable = 0 to stop/resume the timer
--- 2. When 'done' output goes high, the specified duration has elapsed.
--- 3. Set reset = 1 to reset the timer.
--- Separate timer entity
-
 ENTITY timer IS
     GENERIC (
         CLOCK_FREQ : INTEGER := 50_000_000;
@@ -22,23 +15,27 @@ ENTITY timer IS
 END timer;
 
 ARCHITECTURE rtl OF timer IS
-    SIGNAL counter : INTEGER RANGE 0 TO CLOCK_FREQ * DURATION_SEC - 1 := 0;
 BEGIN
-    -- Single counter for the entire duration
     PROCESS (clk, reset)
+        VARIABLE counter : INTEGER RANGE 0 TO CLOCK_FREQ * DURATION_SEC - 1 := 0;
     BEGIN
         IF reset = '1' THEN
-            counter <= 0;
+            counter := 0;
         ELSIF rising_edge(clk) THEN
-            IF enable = '0' THEN
-                counter <= 0; -- Reset when disabled
-            ELSIF counter < CLOCK_FREQ * DURATION_SEC - 1 THEN
-                counter <= counter + 1;
+            IF enable = '1' THEN
+                IF counter < CLOCK_FREQ * DURATION_SEC - 1 THEN
+                    counter := counter + 1;
+                ELSE
+                    counter := 0;
+                END IF;
             END IF;
         END IF;
+
+        -- Immediate assignment (reflects variable’s updated value)
+        IF counter = CLOCK_FREQ * DURATION_SEC - 1 THEN
+            done <= '1';
+        ELSE
+            done <= '0';
+        END IF;
     END PROCESS;
-
-    done <= '1' WHEN counter = CLOCK_FREQ * DURATION_SEC - 1 ELSE
-        '0';
-
 END rtl;

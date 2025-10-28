@@ -31,7 +31,7 @@ n@_opt
 OL;O;2024.3;79
 R2
 Eelevator_fsm
-Z3 w1761661891
+Z3 w1761664501
 Z4 DPx4 ieee 11 numeric_std 0 22 :ASDNFgHXf_ih3J@9F3Ze1
 Z5 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
 Z6 DPx4 ieee 14 std_logic_1164 0 22 eNV`TJ_GofJTzYa?f<@Oe1
@@ -44,9 +44,9 @@ VTQcJPCSF4jb:U@SZhYjcg3
 !s100 ^[6jio:JSnXhZ<8kDFWbY2
 Z10 OV;C;10.5b;63
 31
-Z11 !s110 1761661932
+Z11 !s110 1761664616
 !i10b 1
-Z12 !s108 1761661932.000000
+Z12 !s108 1761664616.000000
 Z13 !s90 -reportprogress|300|-93|elevator_fsm.vhd|
 Z14 !s107 elevator_fsm.vhd|
 !i113 1
@@ -56,11 +56,11 @@ Abehavioral
 R4
 R5
 R6
-DEx4 work 12 elevator_fsm 0 22 TQcJPCSF4jb:U@SZhYjcg3
+Z16 DEx4 work 12 elevator_fsm 0 22 TQcJPCSF4jb:U@SZhYjcg3
 l60
 L17
 VDIil1;^5Z`OJ^MAeMl;nL2
-Z16 !s100 EkTjReD:RjC2^2UeO2oWO0
+!s100 EkTjReD:RjC2^2UeO2oWO0
 R10
 31
 R11
@@ -154,41 +154,41 @@ R29
 o-93
 R15
 Etimer
-Z30 w1761660523
+Z30 w1761664591
 R5
 R6
 R7
 Z31 8timer.vhd
 Z32 Ftimer.vhd
 l0
-L11
-VhRe0R8]G70PMW:Zeon?2K2
-!s100 kG575c:Z<G`kgWY11D@OI1
+L4
+VlTn3iIO6>E37h61co44WS2
+!s100 icRk5>NPo0o03Y0Dai`g80
 R10
 31
 R11
 !i10b 1
-R12
-Z33 !s90 -reportprogress|300|-93|timer.vhd|
-Z34 !s107 timer.vhd|
+Z33 !s108 1761664615.000000
+Z34 !s90 -reportprogress|300|-93|timer.vhd|
+Z35 !s107 timer.vhd|
 !i113 1
 o-93
 R15
 Artl
 R5
 R6
-DEx4 work 5 timer 0 22 hRe0R8]G70PMW:Zeon?2K2
-l26
-L24
-V>S]iTMag7XIUYzbKlbA`83
-!s100 g?LojR]LO2Sn@;SMX]KPG3
+DEx4 work 5 timer 0 22 lTn3iIO6>E37h61co44WS2
+l18
+L17
+VoYH4ihzaFdPEKJ>R;NH^C2
+!s100 @gcdP=A@YFzk_?S5:UV@=0
 R10
 31
 R11
 !i10b 1
-R12
 R33
 R34
+R35
 !i113 1
 o-93
 R15
