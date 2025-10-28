@@ -46,7 +46,6 @@ ARCHITECTURE behavioral OF elevator_fsm IS
   -- SSD signals
   SIGNAL ssd_binary_in : STD_LOGIC_VECTOR(3 DOWNTO 0);
 
-  -- Timer component declaration
   COMPONENT timer IS
     GENERIC (
       CLOCK_FREQ : INTEGER := 50_000_000;
@@ -60,7 +59,6 @@ ARCHITECTURE behavioral OF elevator_fsm IS
     );
   END COMPONENT;
 
-  -- SSD component declaration
   COMPONENT ssd IS
     PORT (
       binary_in : IN STD_LOGIC_VECTOR(3 DOWNTO 0);
@@ -69,7 +67,6 @@ ARCHITECTURE behavioral OF elevator_fsm IS
   END COMPONENT;
 
 BEGIN
-  -- Door timer instance (2 seconds for door open)
   door_timer_inst : timer
   GENERIC MAP(
     CLOCK_FREQ => 50_000_000,
@@ -82,7 +79,6 @@ BEGIN
     done => door_timer_done
   );
 
-  -- Movement timer instance (2 seconds between floors)
   move_timer_inst : timer
   GENERIC MAP(
     CLOCK_FREQ => 50_000_000,
@@ -95,7 +91,6 @@ BEGIN
     done => move_timer_done
   );
 
-  -- SSD instance
   ssd_inst : ssd
   PORT MAP(
     binary_in => ssd_binary_in,
@@ -132,7 +127,7 @@ BEGIN
         pending_requests(current_floor_internal) <= '0';
       END IF;
 
-      -- Target floor selection logic using SCAN algorithm
+      -- Target floor selection logic
       IF pending_requests /= (pending_requests'RANGE => '0') THEN
         CASE direction IS
           WHEN UP =>

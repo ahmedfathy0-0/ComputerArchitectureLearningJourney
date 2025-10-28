@@ -314,7 +314,7 @@ BEGIN
     REPORT "TEST 8: SCAN Algorithm - Request floor 9, then add floor 5 and 1 during upward movement";
     REPORT "Expected: Should go to 5, then 9 (SCAN up), then 1 (SCAN down)";
     REPORT "============================================================";
-    
+
     -- Start from floor 3
     floor_request <= "0011";
     request_valid <= '1';
@@ -323,7 +323,7 @@ BEGIN
     WAIT FOR 500 ns; -- Wait to reach floor 3
 
     REPORT "Starting position - Current floor: " & INTEGER'IMAGE(current_floor);
-    
+
     -- Request floor 9 (start moving up from floor 3)
     floor_request <= "1001";
     request_valid <= '1';
@@ -366,26 +366,26 @@ BEGIN
     REPORT "============================================================";
     REPORT "TEST 9: Request same floor while idle (door should open immediately)";
     REPORT "============================================================";
-    
+
     -- First, wait a bit to ensure we're idle
     WAIT FOR 200 ns;
     REPORT "Before same-floor request - Current floor: " & INTEGER'IMAGE(current_floor);
-    
+
     -- Request the current floor (should be floor 1)
     floor_request <= "0001";
     request_valid <= '1';
     WAIT FOR 10 ns;
     request_valid <= '0';
-    
+
     -- Wait for door to open (should happen quickly since no movement needed)
     WAIT FOR 50 ns;
     REPORT "After same-floor request - Door status: " & INTEGER'IMAGE(to_integer(unsigned(door_status)));
-    
+
     -- Check if door opened
     ASSERT door_status(1) = '1' OR door_status = "0000000000"
     REPORT "WARNING: Door should have opened on floor 1 for same-floor request"
       SEVERITY WARNING;
-    
+
     -- Wait for door cycle to complete
     WAIT FOR 200 ns;
 
@@ -393,7 +393,7 @@ BEGIN
     REPORT "============================================================";
     REPORT "TEST 10: Boundary floor tests (floors 0 and 9)";
     REPORT "============================================================";
-    
+
     -- Request floor 0 (lowest floor)
     floor_request <= "0000";
     request_valid <= '1';
@@ -472,7 +472,7 @@ BEGIN
     REPORT "============================================================";
     REPORT "TEST 12: Add new request while door is open at current floor";
     REPORT "============================================================";
-    
+
     -- Go to floor 5
     floor_request <= "0101";
     request_valid <= '1';
@@ -481,13 +481,13 @@ BEGIN
     WAIT FOR 600 ns; -- Wait to reach and door to open
 
     REPORT "At floor 5, door should be open";
-    
+
     -- While door is open, request floor 7
     floor_request <= "0111";
     request_valid <= '1';
     WAIT FOR 10 ns;
     request_valid <= '0';
-    
+
     -- Wait for door to close and elevator to move
     WAIT FOR 800 ns;
 
@@ -503,7 +503,7 @@ BEGIN
     REPORT "============================================================";
     REPORT "TEST 13: Request same floor multiple times (idempotent test)";
     REPORT "============================================================";
-    
+
     floor_request <= "0110"; -- 6
     request_valid <= '1';
     WAIT FOR 10 ns;
