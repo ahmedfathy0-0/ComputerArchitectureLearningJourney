@@ -572,7 +572,7 @@ END ARCHITECTURE testbench;
 CONFIGURATION elevator_ctrl_tb_cfg OF elevator_ctrl_tb IS
   FOR testbench
     FOR uut : elevator_ctrl
-      FOR behavioral
+      FOR structural
         FOR door_timer_inst : timer
           USE ENTITY work.timer(rtl)
           GENERIC MAP(
